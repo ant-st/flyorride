@@ -22,7 +22,6 @@
               <button
                   class="md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex items-center"
                   @click="dropdownToggler"
-                  @blur="dropdownToggler"
               >
                 <span>Blog</span>
                 <span v-if="dropdownNavbar" class="px-2"> ⬆️ </span>
