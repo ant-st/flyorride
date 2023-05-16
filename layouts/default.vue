@@ -9,13 +9,14 @@
       >
       </div>
       <BaseNavbar />
+      <div>
       <div id="wingPic" class="w-[95%] h-[400px] m-auto">
 
       </div>
-
-      <main class="text-neutral-800">
+      <main class="text-neutral-800 bg-gradient-to-t from-blue-200 to-white">
         <slot />
       </main>
+      </div>
 
       <!-- <BaseFooter /> -->
     </div>
