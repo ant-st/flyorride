@@ -20,15 +20,42 @@ export default {
         'travellers': 1,
         'options': []
       },
+      preds: [],
+      activeInput: ''
     }
   },
   methods: {
     toggleDropper() {
       this.dropper = !this.dropper;
+    },
+    activateInput(newVal) {
+      this.activeInput = newVal;
+    },
+    handlePrediction(newVal) {
+      this.searchQuery[this.activeInput] = newVal;
+    }
+  },
+  computed: {
+    activeQuery() {
+      return this.searchQuery[this.activeInput];
+    }
+  },
+  watch: {
+    activeQuery(newVal) {
+      if (newVal) {
+        let url = `https://proxy.cors.sh/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${newVal}&key=AIzaSyCFmoAQ5iDUdiz36GcaXskcXPFFgdaa4Dw`;
+        fetch(url, {headers: {'x-cors-api-key': 'temp_3da422014a490567c2aee1deb173fde8'}})
+            .then(r => r.json())
+            .then(r => {
+              this.preds = r.predictions.map(el => el.description);
+            });
+      }
+      else {
+        this.preds = [];
+      }
     }
   }
 }
-
 </script>
 
 <template>
@@ -50,15 +77,33 @@ export default {
               <div class="flex flex-row justify-between space-x-4">
                 <div class="flex flex-col" >
                   <label class="leading-loose">Miejsce startu:</label>
-                  <input type="text" v-model="searchQuery.from" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Start">
+                  <input @focus="activateInput('from')"  type="text" v-model="searchQuery.from" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Start">
+                  <PredictionsBox
+                      :preds='preds'
+                      v-if="activeInput === 'from' && preds.length"
+                      @update:prediction = 'handlePrediction'
+                      @closeBox = 'activateInput("")'
+                  />
                 </div>
                 <div class="flex flex-col justify-end" >
                   <label class="leading-loose">Lotniska:</label>
-                  <input type="text" v-model="searchQuery.airport" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Lotniska">
+                  <input @focus="activateInput('airport')"  type="text" v-model="searchQuery.airport" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Lotniska">
+                  <PredictionsBox
+                      :preds='preds'
+                      v-if="activeInput === 'airport' && preds.length"
+                      @update:prediction = 'handlePrediction'
+                      @closeBox = 'activateInput("")'
+                  />
                 </div>
                 <div class="flex flex-col">
                   <label class="leading-loose">Cel podróży:</label>
-                  <input type="text" v-model="searchQuery.to" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Cel">
+                  <input @focus="activateInput('to')"  type="text" v-model="searchQuery.to" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Cel">
+                  <PredictionsBox
+                      :preds='preds'
+                      v-if="activeInput === 'to' && preds.length"
+                      @update:prediction = 'handlePrediction'
+                      @closeBox = 'activateInput("")'
+                  />
                 </div>
               </div>
               <!-- Daty i ludzie -->
