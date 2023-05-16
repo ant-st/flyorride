@@ -1,7 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <li>
+  <li class="py-1">
     <NuxtLink
         class="md:px-8 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline"
     >

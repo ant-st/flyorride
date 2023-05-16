@@ -1,9 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div id="searchBox">
-
-  </div>
+  <TheSearchBox/>
   <div>
     Page: foo
   </div>
