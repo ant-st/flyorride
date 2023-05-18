@@ -1,5 +1,8 @@
 <script>
 
+
+import {useState} from "#app";
+
 export default {
   data() {
     return {
@@ -18,7 +21,11 @@ export default {
         'startDate': '',
         'endDate': '',
         'travellers': 1,
-        'options': []
+        'children': 0,
+        'minNights': 1,
+        'maxNights': 3,
+        'dateInterval': false,
+        'options': [],
       },
       preds: [],
       activeInput: ''
@@ -33,6 +40,9 @@ export default {
     },
     handlePrediction(newVal) {
       this.searchQuery[this.activeInput] = newVal;
+    },
+    handleSearch() {
+      this.$emit('update:query', this.searchQuery);
     }
   },
   computed: {
@@ -42,9 +52,10 @@ export default {
   },
   watch: {
     activeQuery(newVal) {
-      if (newVal) {
-        let url = `https://proxy.cors.sh/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${newVal}&key=AIzaSyCFmoAQ5iDUdiz36GcaXskcXPFFgdaa4Dw`;
-        fetch(url, {headers: {'x-cors-api-key': 'temp_3da422014a490567c2aee1deb173fde8'}})
+      /*
+      if (newVal.length>2) {
+        let url = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${newVal}&types=country|locality&key=AIzaSyCFmoAQ5iDUdiz36GcaXskcXPFFgdaa4Dw`;
+        fetch(url, {headers: {'x-cors-api-key': 'temp_822879ba1f2f295a9bfe89d06be47745'}})
             .then(r => r.json())
             .then(r => {
               this.preds = r.predictions.map(el => el.description);
@@ -53,6 +64,8 @@ export default {
       else {
         this.preds = [];
       }
+
+       */
     }
   }
 }
@@ -106,10 +119,10 @@ export default {
                   />
                 </div>
               </div>
-              <!-- Daty i ludzie -->
+              <!-- Daty -->
               <div class="flex flex-row justify-between items-center space-x-4">
                 <div class="flex flex-col w-1/3 items-between">
-                  <label class="leading-loose">Wylot:</label>
+                  <label class="leading-loose">Wylot{{searchQuery.dateInterval ? ' od ' : ''}}:</label>
                   <div class="relative focus-within:text-gray-600 text-gray-400 w-full">
                     <input type="date" v-model="searchQuery.startDate" class="sm:pr-4 sm:pl-10 px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="25/02/2020">
                     <div class="hidden sm:block absolute left-3 top-2">
@@ -118,7 +131,7 @@ export default {
                   </div>
                 </div>
                 <div class="flex flex-col w-1/3 items-between">
-                  <label class="leading-loose">Powrót:</label>
+                  <label class="leading-loose">{{ searchQuery.dateInterval ? 'Wylot do:' : 'Powrót:' }}</label>
                   <div class="relative focus-within:text-gray-600 text-gray-400 w-full">
                     <input type="date" v-model="searchQuery.endDate" class="sm:pr-4 sm:pl-10 px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="26/02/2020">
                     <div class="hidden sm:block absolute left-3 top-2">
@@ -127,11 +140,16 @@ export default {
                   </div>
                 </div>
                 <div class="flex flex-col w-1/3 items-between">
-                  <label class="leading-loose">Osoby:</label>
-                  <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px]">
-                    <input type="number" v-model="searchQuery.travellers" min=1 class="sm:pr-4 sm:pl-10 px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
-                    <div class="hidden sm:block absolute left-3 top-2">
-                      <img class="w-6 h-6 p-[2px]" alt="human picto" src="../media/human-location-svgrepo-com.svg"/>
+                  <label class="leading-loose">Liczba nocy:</label>
+                  <div class="w-full flex flex-line justify-between">
+                    <div class="relative focus-within:text-gray-600 text-gray-400 w-1/4">
+                      <input type="checkbox" v-model="searchQuery.dateInterval" class="m-2 px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
+                    </div>
+                    <div class="relative focus-within:text-gray-600 text-gray-400 w-1/3">
+                      <input :disabled='!searchQuery.dateInterval' type="number" v-model="searchQuery.minNights" min=0 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
+                    </div>
+                    <div class="relative focus-within:text-gray-600 text-gray-400 w-1/3">
+                      <input :disabled='!searchQuery.dateInterval' type="number" v-model="searchQuery.maxNights" min=0 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
                     </div>
                   </div>
                 </div>
@@ -157,7 +175,7 @@ export default {
                       <transition name="transform-fade-down">
                         <ul
                             v-if="dropper"
-                            class="flex lg:absolute flex-col w-full py-1 lg:bg-white rounded-md lg:shadow-md pl-2 lg:pl-0"
+                            class="z-20 flex lg:absolute flex-col w-full py-1 lg:bg-white rounded-md lg:shadow-md pl-2 lg:pl-0"
                         >
                           <li v-for="option in searchOptions">
                             <label>
@@ -169,13 +187,27 @@ export default {
                     </div>
                 </div>
               </div>
+              <!-- Ludzie -->
+              <div class="flex flex-row justify-between items-center space-x-4">
+                <div class="flex flex-col w-1/3 items-between">
+                  <label class="leading-loose">Dorośli i dzieci:</label>
+                  <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px] flex flex-line">
+                    <div class="w-1/2 p-2">
+                      <input type="number" v-model="searchQuery.travellers" min=1 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
+                    </div>
+                    <div class="w-1/2 p-2">
+                      <input type="number" v-model="searchQuery.children" min=0 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <!-- Przyciski -->
             <div class="pt-4 flex items-center space-x-4">
               <button class="flex justify-center items-center w-full text-gray-900 px-4 py-3 rounded-md focus:outline-none">
                 <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> Reset
               </button>
-              <button class="bg-blue-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none">Szukaj!</button>
+              <button @click='handleSearch' class="bg-blue-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none">Szukaj!</button>
             </div>
           </div>
         </div>
