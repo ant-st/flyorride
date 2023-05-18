@@ -22,7 +22,8 @@ const kiwiSettings = {headers: {
     'accept': 'application/json',
     'apikey': 'yhlH-wn2SXQ_oUsYQK-nADaVbHkU0URm',
   }};
-let kiwiResults = [];
+
+const {setResults} = useKiwiResultsStore();
 
 const transformDate = (date: string | undefined) => {
   let elements = date ? date.split('-') : '';
@@ -86,7 +87,8 @@ const getFromKiwi = async () => {
   }
 
   await fetch(getKiwiSearchUrl(query), kiwiSettings).then(r => r.json()).then(r => {
-    kiwiResults = r;
+    console.log(r);
+    setResults(r);
     navigateTo('/results')
   });
 }
