@@ -6,8 +6,20 @@ const props = defineProps({
   },
   distances: {
     type: Object
+  },
+  showCost: {
+    type: Boolean
+  },
+  consumption: {
+    type: Number
   }
 });
+/*
+const queryStore = useQueryStore();
+const consumption = queryStore.consumption;
+
+ */
+const fuelPrice = 1.40;
 </script>
 
 <template>
@@ -16,7 +28,9 @@ const props = defineProps({
     <h4>{{ new Date(flight['local_departure']).toLocaleDateString() }} -> {{ new Date(flight.route[flight.route.length-1]['local_departure']).toLocaleDateString() }} </h4>
     <p>Noce: {{flight.nightsInDest}} Przesiadki: {{flight.route.length-2}}. Linie: {{flight.airlines}}</p>
     <p>{{flight.price}} euro</p>
-    <p v-if="Object.keys(distances).length">{{distances[flight.flyFrom].distance.text}} - {{distances[flight.flyFrom].duration.text}}</p>
+    <p v-if="Object.keys(distances).length && showCost">
+      {{distances[flight.flyFrom].distance.text}} - {{distances[flight.flyFrom].duration.text}} - {{(distances[flight.flyFrom].distance.value / 100000 * fuelPrice * consumption).toFixed(2)}} euro
+    </p>
   </div>
 </template>
 

@@ -14,6 +14,7 @@ type queryType = {
   'minNights'?: Number,
   'maxNights'?: Number,
   'dateInterval'?: Boolean,
+  'consumption'?: Number
 
 }
 let query: queryType = {};
@@ -98,7 +99,6 @@ const getFromKiwi = async () => {
 <template>
   <TheSearchBox @update:query = handleQueryChange />
   <div id="content" class="relative -top-80">
-    Page: index
     <NuxtPage/>
   </div>
 

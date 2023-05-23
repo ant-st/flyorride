@@ -28,7 +28,7 @@
           let distances = {};
           // @ts-ignore
           state.airports.map(airport => distances[airport] = 0);
-          const fetchUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?&units=metric` +
+          const fetchUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?&units=metric` +
               `&destinations=${Object.keys(distances).map(airport => `airport%20${airport}%7C`)}` +
               `&origins=${startPoint}` +
               `&key=AIzaSyCFmoAQ5iDUdiz36GcaXskcXPFFgdaa4Dw`;

@@ -24,6 +24,7 @@ export default {
         'maxNights': 3,
         'dateInterval': false,
         'options': [],
+        'consumption': 7.5
       },
       preds: [],
       activeInput: ''
@@ -52,10 +53,10 @@ export default {
   },
   watch: {
     activeQuery(newVal) {
-      /*
-      if (newVal.length>2) {
-        let url = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${newVal}&types=country|locality&key=AIzaSyCFmoAQ5iDUdiz36GcaXskcXPFFgdaa4Dw`;
-        fetch(url, {headers: {'x-cors-api-key': 'temp_822879ba1f2f295a9bfe89d06be47745'}})
+
+      if (newVal && newVal.length>2) {
+        let url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${newVal}&types=country|locality&key=AIzaSyCFmoAQ5iDUdiz36GcaXskcXPFFgdaa4Dw`;
+        fetch(url)
             .then(r => r.json())
             .then(r => {
               this.preds = r.predictions.map(el => el.description);
@@ -65,7 +66,7 @@ export default {
         this.preds = [];
       }
 
-       */
+
     }
   }
 }
@@ -198,6 +199,12 @@ export default {
                     <div class="w-1/2 p-2">
                       <input type="number" v-model="searchQuery.children" min=0 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
                     </div>
+                  </div>
+                </div>
+                <div class="flex flex-col w-1/3 items-between">
+                  <label class="leading-loose">Spalanie auta:</label>
+                  <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px] flex flex-line">
+                      <input type="number" v-model="searchQuery.consumption" min=1 step=0.5 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
                   </div>
                 </div>
               </div>
