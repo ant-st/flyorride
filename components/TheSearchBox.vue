@@ -1,8 +1,6 @@
 <script>
 
 
-import {useState} from "#app";
-
 export default {
   data() {
     return {
@@ -42,6 +40,8 @@ export default {
       this.searchQuery[this.activeInput] = newVal;
     },
     handleSearch() {
+      const store = useQueryStore();
+      store.query = this.searchQuery;
       this.$emit('update:query', this.searchQuery);
     }
   },
