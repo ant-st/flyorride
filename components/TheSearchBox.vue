@@ -25,7 +25,8 @@ export default {
         'dateInterval': false,
         'options': [],
         'returnFromOther': false,
-        'returnToOther': false
+        'returnToOther': false,
+        'stopovers': 1
       },
       preds: [],
       activeInput: ''
@@ -202,13 +203,28 @@ export default {
                     </div>
                   </div>
                 </div>
-                <div class="flex flex-col w-2/3 items-between">
-                  <label class="leading-loose">Powrót z innego miasta:
-                    <input type="checkbox" v-model="searchQuery.returnFromOther"/>
-                  </label>
-                  <label class="leading-loose">Powrót do innego miasta:
-                    <input type="checkbox" v-model="searchQuery.returnToOther"/>
-                  </label>
+                <div class="flex flex-col w-1/3 items-between">
+                  <label class="leading-loose">Powrót:</label>
+                  <div class="relative w-full max-w-[155px] flex flex-line">
+                    <div class="w-full p-2">
+                      <label class="flex flex-line w-full justify-between">
+                        <p class="text-sm ">Z innego miasta:</p>
+                        <input type="checkbox" v-model="searchQuery.returnFromOther"/>
+                      </label>
+                      <label class="flex flex-line w-full justify-between">
+                        <p class="text-sm">Do innego miasta:</p>
+                        <input type="checkbox" v-model="searchQuery.returnToOther"/>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-col w-1/3 items-between">
+                  <label class="leading-loose">Maks. przesiadki:</label>
+                  <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px] flex flex-line">
+                    <div class="w-[80%] p-2">
+                      <input type="number" v-model="searchQuery.stopovers" min=0 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
