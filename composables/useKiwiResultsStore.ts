@@ -39,6 +39,7 @@
               // @ts-ignore
               distances[airport] = response[index];
             });
+            console.log('Distances received');
             state.distances = distances;
           });
 

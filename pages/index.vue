@@ -61,6 +61,7 @@ const handleQueryChange = (newQuery: Object) => {
 }
 
 const getFromKiwi = async () => {
+  store.kiwiResults = [];
   if (query.airport?.includes(',')) {
     query.fromID = await fetch(getKiwiCityUrl(query.airport.split(',')[0]), kiwiSettings).then(r => r.json()).then(r => {
       console.log(r.locations[0].id);
