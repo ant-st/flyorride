@@ -14,7 +14,9 @@ type queryType = {
   'minNights'?: Number,
   'maxNights'?: Number,
   'dateInterval'?: Boolean,
-  'consumption'?: Number
+  'consumption'?: Number,
+  'returnFromOther'?: Boolean,
+  'returnToOther'?: Boolean,
 
 }
 let query: queryType = {};
@@ -36,11 +38,11 @@ const getKiwiCityUrl = (query: string | undefined) => `https://api.tequila.kiwi.
 const getKiwiSearchUrl = (query: queryType) => {
   let result = `https://api.tequila.kiwi.com/v2/search?` +
   `fly_from=${query.fromID}&fly_to=${query.toID}` +
-  `&flight_type=round&ret_from_diff_city=true&ret_to_diff_city=true` +
+  `&flight_type=round&ret_from_diff_city=${query.returnFromOther}&ret_to_diff_city=${query.returnToOther}` +
   `&one_for_city=0&one_per_date=0` +
   `&adults=${query.travellers}&children=${query.children}` +
   `&only_working_days=false&only_weekends=false&partner_market=pl` +
-  `&max_stopovers=2&max_sector_stopovers=2&vehicle_type=aircraft&limit=20`;
+  `&max_stopovers=2&max_sector_stopovers=2&vehicle_type=aircraft&limit=50`;
 
   if (query.dateInterval) {
     result+=`&date_from=${transformDate(query.startDate)}&date_to=${transformDate(query.endDate)}` +

@@ -24,6 +24,8 @@ export default {
         'maxNights': 3,
         'dateInterval': false,
         'options': [],
+        'returnFromOther': false,
+        'returnToOther': false
       },
       preds: [],
       activeInput: ''
@@ -199,6 +201,14 @@ export default {
                       <input type="number" v-model="searchQuery.children" min=0 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
                     </div>
                   </div>
+                </div>
+                <div class="flex flex-col w-2/3 items-between">
+                  <label class="leading-loose">Powrót z innego miasta:
+                    <input type="checkbox" v-model="searchQuery.returnFromOther"/>
+                  </label>
+                  <label class="leading-loose">Powrót do innego miasta:
+                    <input type="checkbox" v-model="searchQuery.returnToOther"/>
+                  </label>
                 </div>
               </div>
             </div>
