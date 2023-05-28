@@ -44,6 +44,24 @@ export default {
       const store = useQueryStore();
       store.query = this.searchQuery;
       this.$emit('update:query', this.searchQuery);
+    },
+    handleReset() {
+      this.searchQuery = {
+        'from': '',
+        'airport': '',
+        'to': '',
+        'startDate': '',
+        'endDate': '',
+        'travellers': 1,
+        'children': 0,
+        'minNights': 1,
+        'maxNights': 3,
+        'dateInterval': false,
+        'options': [],
+        'returnFromOther': false,
+        'returnToOther': false,
+        'stopovers': 1
+      }
     }
   },
   computed: {
@@ -53,7 +71,6 @@ export default {
   },
   watch: {
     activeQuery(newVal) {
-
       if (newVal && newVal.length>2) {
         let url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${newVal}&types=country|locality&key=AIzaSyCFmoAQ5iDUdiz36GcaXskcXPFFgdaa4Dw`;
         fetch(url)
@@ -65,10 +82,8 @@ export default {
       else {
         this.preds = [];
       }
-
-
     }
-  }
+  },
 }
 </script>
 
@@ -76,7 +91,7 @@ export default {
   <div class="relative -top-80 min-h-screen py-6 flex flex-col justify-center sm:py-12">
     <div class="relative py-3 sm:max-w-xl sm:mx-auto">
       <div class="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
-        <div class="max-w-lg mx-auto">
+        <form @submit.prevent='handleSearch' @reset.prevent="handleReset" class="max-w-lg mx-auto">
           <!-- Header -->
           <div class="flex items-center space-x-5">
             <div class="h-14 w-14 bg-blue-200 rounded-full flex flex-shrink-0 justify-center items-center text-yellow-500 text-2xl font-mono">✈️</div>
@@ -91,7 +106,7 @@ export default {
               <div class="flex flex-row justify-between space-x-4">
                 <div class="relative flex flex-col" >
                   <label class="leading-loose">Miejsce startu:</label>
-                  <input @focus="activateInput('from')"  type="text" v-model="searchQuery.from" class=" px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Start">
+                  <input required @focus="activateInput('from')"  type="text" v-model="searchQuery.from" class=" px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Start">
                   <PredictionsBox
                       :preds='preds'
                       v-if="activeInput === 'from' && preds.length"
@@ -101,7 +116,7 @@ export default {
                 </div>
                 <div class="relative flex flex-col justify-end" >
                   <label class="leading-loose">Lotniska:</label>
-                  <input @focus="activateInput('airport')"  type="text" v-model="searchQuery.airport" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Lotniska">
+                  <input required @focus="activateInput('airport')"  type="text" v-model="searchQuery.airport" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Lotniska">
                   <PredictionsBox
                       :preds='preds'
                       v-if="activeInput === 'airport' && preds.length"
@@ -111,7 +126,7 @@ export default {
                 </div>
                 <div class="relative flex flex-col">
                   <label class="leading-loose">Cel podróży:</label>
-                  <input @focus="activateInput('to')"  type="text" v-model="searchQuery.to" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Cel">
+                  <input required @focus="activateInput('to')"  type="text" v-model="searchQuery.to" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Cel">
                   <PredictionsBox
                       :preds='preds'
                       v-if="activeInput === 'to' && preds.length"
@@ -125,7 +140,7 @@ export default {
                 <div class="flex flex-col w-1/3 items-between">
                   <label class="leading-loose">Wylot{{searchQuery.dateInterval ? ' od ' : ''}}:</label>
                   <div class="relative focus-within:text-gray-600 text-gray-400 w-full">
-                    <input type="date" v-model="searchQuery.startDate" class="sm:pr-4 sm:pl-10 px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="25/02/2020">
+                    <input required type="date" v-model="searchQuery.startDate" class="sm:pr-4 sm:pl-10 px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="25/02/2020">
                     <div class="hidden sm:block absolute left-3 top-2">
                       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </div>
@@ -134,7 +149,7 @@ export default {
                 <div class="flex flex-col w-1/3 items-between">
                   <label class="leading-loose">{{ searchQuery.dateInterval ? 'Wylot do:' : 'Powrót:' }}</label>
                   <div class="relative focus-within:text-gray-600 text-gray-400 w-full">
-                    <input type="date" v-model="searchQuery.endDate" class="sm:pr-4 sm:pl-10 px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="26/02/2020">
+                    <input :min="searchQuery.startDate" required type="date" v-model="searchQuery.endDate" class="sm:pr-4 sm:pl-10 px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="26/02/2020">
                     <div class="hidden sm:block absolute left-3 top-2">
                       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </div>
@@ -150,7 +165,7 @@ export default {
                       <input :disabled='!searchQuery.dateInterval' type="number" v-model="searchQuery.minNights" min=0 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
                     </div>
                     <div class="relative focus-within:text-gray-600 text-gray-400 w-1/3">
-                      <input :disabled='!searchQuery.dateInterval' type="number" v-model="searchQuery.maxNights" min=0 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
+                      <input :disabled='!searchQuery.dateInterval' type="number" v-model="searchQuery.maxNights" :min="searchQuery.minNights" class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
                     </div>
                   </div>
                 </div>
@@ -228,13 +243,13 @@ export default {
             </div>
             <!-- Przyciski -->
             <div class="pt-4 flex items-center space-x-4">
-              <button class="flex justify-center items-center w-full text-gray-900 px-4 py-3 rounded-md focus:outline-none">
+              <button type='reset' class="flex justify-center items-center w-full text-gray-900 px-4 py-3 rounded-md focus:outline-none">
                 <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> Reset
               </button>
-              <button @click='handleSearch' class="bg-blue-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none">Szukaj!</button>
+              <button type='submit' class="bg-blue-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none">Szukaj!</button>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
