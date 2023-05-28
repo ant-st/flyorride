@@ -118,7 +118,7 @@ const calculateTime = (time1: string, time2: string) => {
     <!-- Car -->
     <div
         v-if="distances[flight.flyFrom] && showCost"
-         class="my-6 flex flex-line w-full items-center justify-center border-t-2"
+         class="mt-6 flex flex-line w-full items-center justify-center border-t-2"
     >
       <p class="w-[35%] text-right px-2">W jedną stronę: {{distances[flight.flyFrom].distance.text}}</p>
       <img src="../media/carIcon.svg" class="w-[20%]"/>
@@ -137,7 +137,7 @@ const calculateTime = (time1: string, time2: string) => {
         </li>
         <li class="flex flex-line items-center">
           <img src="../media/suitcase.svg" class="w-[40px]"/>
-          <span class="text-sm px-2">2x</span> 500zł
+          <span class="text-sm px-2">max.</span> {{flight['bags_price']['1'].toFixed(2)}}€
         </li>
         <li class="flex flex-line items-center" v-if="distances[flight.flyFrom] && showCost">
           <img src="../media/carIcon.svg" class="w-[40px]"/>
@@ -146,7 +146,7 @@ const calculateTime = (time1: string, time2: string) => {
       </ul>
       <h3 class="text-3xl hover:underline">
         <NuxtLink :to="flight['deep_link']" target="_blank" rel="noopener">
-        {{ Number(flight.price) + (distances[flight.flyFrom] && showCost ? Number(distances[flight.flyFrom].cost)*2 : 0)}}€
+        {{ (Number(flight.price) + ((distances[flight.flyFrom] && showCost ) ? Number(distances[flight.flyFrom].cost)*2 : 0)).toFixed(2) }}€
         </NuxtLink>
       </h3>
     </div>
