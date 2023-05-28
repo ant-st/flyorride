@@ -89,9 +89,9 @@ export default {
             <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
               <!-- Start i cel -->
               <div class="flex flex-row justify-between space-x-4">
-                <div class="flex flex-col" >
+                <div class="relative flex flex-col" >
                   <label class="leading-loose">Miejsce startu:</label>
-                  <input @focus="activateInput('from')"  type="text" v-model="searchQuery.from" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Start">
+                  <input @focus="activateInput('from')"  type="text" v-model="searchQuery.from" class=" px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Start">
                   <PredictionsBox
                       :preds='preds'
                       v-if="activeInput === 'from' && preds.length"
@@ -99,7 +99,7 @@ export default {
                       @closeBox = 'activateInput("")'
                   />
                 </div>
-                <div class="flex flex-col justify-end" >
+                <div class="relative flex flex-col justify-end" >
                   <label class="leading-loose">Lotniska:</label>
                   <input @focus="activateInput('airport')"  type="text" v-model="searchQuery.airport" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Lotniska">
                   <PredictionsBox
@@ -109,7 +109,7 @@ export default {
                       @closeBox = 'activateInput("")'
                   />
                 </div>
-                <div class="flex flex-col">
+                <div class="relative flex flex-col">
                   <label class="leading-loose">Cel podróży:</label>
                   <input @focus="activateInput('to')"  type="text" v-model="searchQuery.to" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Cel">
                   <PredictionsBox
