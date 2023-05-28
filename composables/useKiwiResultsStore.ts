@@ -27,7 +27,8 @@
           const queryStore = useQueryStore();
           // @ts-ignore
           const startPoint = queryStore.query.from;
-          if (startPoint) {
+          // @ts-ignore
+          if (startPoint && state.airports.length) {
             let distances = {};
 
             // @ts-ignore
@@ -37,19 +38,23 @@
                 `&origins=${startPoint}` +
                 `&key=AIzaSyCFmoAQ5iDUdiz36GcaXskcXPFFgdaa4Dw`;
 
-            await fetch(fetchUrl).then(r => r.json()).then(r => {
+            return await fetch(fetchUrl).then(r => r.json()).then(r => {
               let response = r.rows[0].elements;
               Object.keys(distances).map((airport, index) => {
                 // @ts-ignore
                 distances[airport] = response[index];
                 // @ts-ignore
-                distances[airport].cost = ((response[index].distance.value / 100000) * state.fuelPrice * state.fuelConsumption).toFixed(2);
+                if (response[index].distance.value) distances[airport].cost = ((response[index].distance.value / 100000) * state.fuelPrice * state.fuelConsumption).toFixed(2);
               });
               console.log('Distances received');
               state.distances = distances;
+              return distances;
             });
           }
         }
+      },
+      getDistances: (state) => {
+        return Object.keys(state.distances).length
       }
     }
   });
