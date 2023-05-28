@@ -75,7 +75,7 @@ const calculateTime = (time1: string, time2: string) => {
         </div>
       </div>
       <div class="flex flex-col w-1/3 justify-between h-full text-right">
-        <p class="text-xs">{{ new Date(firstLeg[firstLeg.length-1]['local_departure']).toLocaleString() }}</p>
+        <p class="text-xs">{{ new Date(firstLeg[firstLeg.length-1]['local_arrival']).toLocaleString() }}</p>
         <div class="flex flex-line items-center justify-end">
           <div class="flex flex-col p-2">
             <p class="text-lg">{{firstLeg[firstLeg.length-1].cityTo}}</p>
@@ -119,7 +119,7 @@ const calculateTime = (time1: string, time2: string) => {
         </div>
       </div>
       <div class="flex flex-col w-1/3 justify-between h-full text-right">
-        <p class="text-xs">{{ new Date(secondLeg[secondLeg.length-1]['local_departure']).toLocaleString() }}</p>
+        <p class="text-xs">{{ new Date(secondLeg[secondLeg.length-1]['local_arrival']).toLocaleString() }}</p>
         <div class="flex flex-line items-center justify-end">
           <div class="flex flex-col p-2">
             <p class="text-lg">{{secondLeg[secondLeg.length-1].cityTo}}</p>
