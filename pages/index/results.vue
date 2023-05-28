@@ -8,7 +8,7 @@ let consumption = ref(7.5);
   <div>
     <div class="relative px-4 py-10 bg-white mx-8 mx-10 shadow rounded-3xl sm:p-10 flex flex-col justify-between">
       <h2 class="w-full text-center">Wyniki:</h2>
-      <div class="flex flex-line w-full h-[30px]">
+      <div v-if="Object.keys(store.distances).length" class="flex flex-line w-full h-[30px]">
         <label class="flex flex-line w-1/2 justify-center">
           <p>Pokaż koszty dojazdu samochodem na lotnisko: </p>
           <input type="checkbox" class="p-2 m-2" v-model="showCost"/>
@@ -20,7 +20,6 @@ let consumption = ref(7.5);
           </div>
         </label>
       </div>
-
       <div class="flex flex-line flex-wrap">
         <FlightThumb
             v-if="store.kiwiResults"
