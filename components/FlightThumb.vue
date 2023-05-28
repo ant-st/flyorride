@@ -17,6 +17,7 @@ const props = defineProps({
 });
 
 const queryStore = useQueryStore();
+const favoritesStore = useFavoritesStore();
 
 
 const crucialIndex = props.flight.route.findIndex(e => e.flyTo === props.flight.flyTo);
@@ -37,6 +38,8 @@ const calculateTime = (time1: string, time2: string) => {
   let diff = (date1.getTime() - date2.getTime())/60000;
   return `${Math.floor(diff/60)} godz. ${diff%60} min.`
 }
+
+
 
 </script>
 
@@ -140,7 +143,7 @@ const calculateTime = (time1: string, time2: string) => {
     </div>
     <!-- Cost -->
     <div class="flex flex-line justify-between items-center border-t-2 p-2">
-      <ul>
+      <ul class="w-1/3">
         <li class="flex flex-line items-center">
           <img src="../media/plane1.svg" class="w-[40px]"/>
           <span class="text-sm px-2">{{queryStore.query.travellers}}x</span> {{flight.fare.adults}}€
@@ -158,7 +161,8 @@ const calculateTime = (time1: string, time2: string) => {
           <span class="text-sm px-2">2x</span> {{distances[flight.flyFrom].cost}}€
         </li>
       </ul>
-      <h3 class="text-3xl hover:underline">
+      <button class="text-3xl" @click="() => favoritesStore.favorites.push(flight)">{{favoritesStore.checkId(flight.id) ? '❤️' : '🤍' }}</button>
+      <h3 class="text-3xl hover:underline w-1/3 text-right">
         <NuxtLink :to="flight['deep_link']" target="_blank" rel="noopener">
         {{ (Number(flight.price) + ((distances[flight.flyFrom] && showCost ) ? Number(distances[flight.flyFrom].cost)*2 : 0)).toFixed(2) }}€
         </NuxtLink>
