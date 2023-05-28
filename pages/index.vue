@@ -43,7 +43,7 @@ const getKiwiSearchUrl = (query: queryType) => {
   `&one_for_city=0&one_per_date=0` +
   `&adults=${query.travellers}&children=${query.children}` +
   `&only_working_days=false&only_weekends=false&partner_market=pl` +
-  `&max_stopovers=${query.stopovers}&max_sector_stopovers=2&vehicle_type=aircraft&limit=50`;
+  `&max_stopovers=${query.stopovers}&max_sector_stopovers=2&vehicle_type=aircraft&limit=20`;
 
   if (query.dateInterval) {
     result+=`&date_from=${transformDate(query.startDate)}&date_to=${transformDate(query.endDate)}` +

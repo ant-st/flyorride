@@ -23,6 +23,14 @@ const crucialIndex = props.flight.route.findIndex(e => e.flyTo === props.flight.
 const firstLeg = props.flight.route.slice(0, crucialIndex + 1);
 const secondLeg = props.flight.route.slice(crucialIndex + 1);
 
+let firstLegAirlines = {};
+let secondLegAirlines = {};
+
+//@ts-ignore
+firstLeg.forEach((flight) => { firstLegAirlines[flight.airline] = `https://daisycon.io/images/airline/?width=50&height=25&iata=${flight.airline}` })
+//@ts-ignore
+secondLeg.forEach((flight) => { secondLegAirlines[flight.airline] = `https://daisycon.io/images/airline/?width=50&height=25&iata=${flight.airline}` })
+
 const calculateTime = (time1: string, time2: string) => {
   let date1 = new Date(time1);
   let date2 = new Date(time2);
@@ -37,7 +45,7 @@ const calculateTime = (time1: string, time2: string) => {
   <div class="relative w-[48%] p-4 bg-blue-50 m-2 my-4 shadow rounded-3xl flex flex-col justify-between">
     <!-- First leg -->
     <div class="flex flex-line w-full justify-between items-start">
-      <div class="flex flex-col w-1/3">
+      <div class="flex flex-col w-1/3 justify-between h-full">
         <p class="text-xs">{{ new Date(firstLeg[0]['local_departure']).toLocaleString() }}</p>
         <div class="flex flex-line items-center">
           <SVGTakeoff/>
@@ -48,6 +56,9 @@ const calculateTime = (time1: string, time2: string) => {
         </div>
       </div>
       <div class="w-1/3 self-center">
+        <div class="flex flex-line w-full justify-evenly mb-2">
+          <img v-for="airlineLogo in firstLegAirlines" :src="airlineLogo"/>
+        </div>
         <div v-if='firstLeg.length>1' class="w-full stopover flex flex-col items-center relative">
           <p class="w-full mx-auto text-center text-sm">{{firstLeg.length-1}} Przesiadk{{firstLeg.length === 2 ? 'a' : 'i'}}!</p>
           <span class="hidden box-border absolute top-7">
@@ -63,7 +74,7 @@ const calculateTime = (time1: string, time2: string) => {
           <p class="text-xs p-2">{{Math.floor(flight.duration.departure / 3600)}} godz. {{flight.duration.departure / 60 % 60}} min.</p>
         </div>
       </div>
-      <div class="flex flex-col w-1/3 text-right">
+      <div class="flex flex-col w-1/3 justify-between h-full text-right">
         <p class="text-xs">{{ new Date(firstLeg[firstLeg.length-1]['local_departure']).toLocaleString() }}</p>
         <div class="flex flex-line items-center justify-end">
           <div class="flex flex-col p-2">
@@ -78,7 +89,7 @@ const calculateTime = (time1: string, time2: string) => {
     <h3 class="my-6 py-2 mx-auto w-full border-y-2 text-center">{{flight.nightsInDest}} nocy</h3>
     <!-- Second leg -->
     <div class="flex flex-line w-full justify-between items-start mb-6">
-      <div class="flex flex-col w-1/3">
+      <div class="flex flex-col w-1/3 justify-between h-full">
         <p class="text-xs">{{ new Date(secondLeg[0]['local_departure']).toLocaleString() }}</p>
         <div class="flex flex-line items-center">
           <SVGTakeoff/>
@@ -89,6 +100,9 @@ const calculateTime = (time1: string, time2: string) => {
         </div>
       </div>
       <div class="w-1/3 self-center">
+        <div class="flex flex-line w-full justify-evenly mb-2">
+          <img v-for="airlineLogo in secondLegAirlines" :src="airlineLogo"/>
+        </div>
         <div v-if='secondLeg.length>1' class="w-full stopover flex flex-col items-center relative">
           <p class="w-full mx-auto text-center text-sm">{{secondLeg.length-1}} Przesiadk{{secondLeg.length === 2 ? 'a' : 'i'}}!</p>
           <span class="hidden box-border absolute top-7">
@@ -104,7 +118,7 @@ const calculateTime = (time1: string, time2: string) => {
           <p class="text-xs p-2">{{Math.floor(flight.duration.return / 3600)}} godz. {{flight.duration.return / 60 % 60}} min.</p>
         </div>
       </div>
-      <div class="flex flex-col w-1/3 text-right">
+      <div class="flex flex-col w-1/3 justify-between h-full text-right">
         <p class="text-xs">{{ new Date(secondLeg[secondLeg.length-1]['local_departure']).toLocaleString() }}</p>
         <div class="flex flex-line items-center justify-end">
           <div class="flex flex-col p-2">
@@ -151,27 +165,7 @@ const calculateTime = (time1: string, time2: string) => {
       </h3>
     </div>
   </div>
-  <!--
-  <div class="relative w-[48%] p-4 bg-blue-50 m-2 my-4 shadow rounded-3xl flex flex-col">
-    <div>
-      <div class="flex flex-line">
-        <p v-for="flight in firstLeg">{{flight.cityFrom}}, {{flight.flyFrom}} -> </p>
-        <p>{{firstLeg[firstLeg.length - 1].cityTo}}, {{firstLeg[firstLeg.length - 1].flyTo}}</p>
-      </div>
-      <div class="flex flex-line">
-        <p v-for="flight in secondLeg">{{flight.cityFrom}}, {{flight.flyFrom}} -> </p>
-        <p>{{secondLeg[secondLeg.length - 1].cityTo}}, {{secondLeg[secondLeg.length - 1].flyTo}}</p>
-      </div>
-    </div>
-    <h4>{{ new Date(flight['local_departure']).toLocaleDateString() }} -> {{ new Date(flight.route[flight.route.length-1]['local_departure']).toLocaleDateString() }} </h4>
-    <p>Noce: {{flight.nightsInDest}} Przesiadki: {{flight.route.length-2}}. Linie: {{flight.airlines}}</p>
-    <p>{{flight.price}} euro</p>
-    <p v-if="distances[flight.flyFrom] && showCost">
-      {{distances[flight.flyFrom].distance.text}} - {{distances[flight.flyFrom].duration.text}} - {{(distances[flight.flyFrom].distance.value / 100000 * fuelPrice * consumption).toFixed(2)}} euro
-    </p>
-    <NuxtLink :to="flight['deep_link']" target="_blank" rel="noopener">Klik</NuxtLink>
-  </div>
-  -->
+
 </template>
 
 <style scoped>
