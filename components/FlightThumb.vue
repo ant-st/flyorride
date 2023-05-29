@@ -134,7 +134,7 @@ const calculateTime = (time1: string, time2: string) => {
     </div>
     <!-- Car -->
     <div
-        v-if="distances[flight.flyFrom] && showCost"
+        v-if="distances && distances[flight.flyFrom] && showCost"
          class="mt-6 flex flex-line w-full items-center justify-center border-t-2"
     >
       <p class="w-[35%] text-right px-2">W jedną stronę: {{distances[flight.flyFrom].distance.text}}</p>
@@ -156,15 +156,15 @@ const calculateTime = (time1: string, time2: string) => {
           <img src="../media/suitcase.svg" class="w-[40px]"/>
           <span class="text-sm px-2">max.</span> {{flight['bags_price']['1'].toFixed(2)}}€
         </li>
-        <li class="flex flex-line items-center" v-if="distances[flight.flyFrom] && showCost">
+        <li class="flex flex-line items-center" v-if="distances && distances[flight.flyFrom] && showCost">
           <img src="../media/carIcon.svg" class="w-[40px]"/>
           <span class="text-sm px-2">2x</span> {{distances[flight.flyFrom].cost}}€
         </li>
       </ul>
-      <button class="text-3xl" @click="() => favoritesStore.favorites.push(flight)">{{favoritesStore.checkId(flight.id) ? '❤️' : '🤍' }}</button>
+      <button class="text-3xl" @click="() => favoritesStore.toggle(flight)">{{favoritesStore.checkId(flight.id) ? '❤️' : '🤍' }}</button>
       <h3 class="text-3xl hover:underline w-1/3 text-right">
         <NuxtLink :to="flight['deep_link']" target="_blank" rel="noopener">
-        {{ (Number(flight.price) + ((distances[flight.flyFrom] && showCost ) ? Number(distances[flight.flyFrom].cost)*2 : 0)).toFixed(2) }}€
+        {{ (Number(flight.price) + ((distances && distances[flight.flyFrom] && showCost ) ? Number(distances[flight.flyFrom].cost)*2 : 0)).toFixed(2) }}€
         </NuxtLink>
       </h3>
     </div>

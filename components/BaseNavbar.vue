@@ -15,8 +15,8 @@
               :class="[open ? 'flex' : 'hidden lg:flex']"
               class="w-full h-auto flex flex-col flex-grow lg:items-center pb-4 lg:pb-0 lg:justify-start lg:flex-row origin-top duration-300 xl:space-x-2 space-y-3 lg:space-y-0"
           >
-            <NavLink>Home</NavLink>
-            <NavLink>Zapisane</NavLink>
+            <NavLink :to="'/'">Home</NavLink>
+            <NavLink :to="'/favorites'">Ulubione</NavLink>
             <NavLink>Inspiracje</NavLink>
             <li class="relative group">
               <button
