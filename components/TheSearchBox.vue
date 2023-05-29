@@ -1,4 +1,5 @@
 <script>
+import {useStorage} from '@vueuse/core'
 export default {
   data() {
     return {
@@ -10,7 +11,7 @@ export default {
         {name: 'Wynajem auta', value: 'carRent'},
         {name: 'Atrakcje', value: 'events'},
       ],
-      searchQuery: {
+      searchQuery: useStorage('query', {
         'from': '',
         'airport': '',
         'to': '',
@@ -25,7 +26,7 @@ export default {
         'returnFromOther': false,
         'returnToOther': false,
         'stopovers': 1
-      },
+      }),
       preds: [],
       activeInput: ''
     }

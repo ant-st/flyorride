@@ -28,6 +28,7 @@ let consumption = ref(7.5);
             :distances="store.distances"
             :showCost="showCost"
             :consumption="consumption"
+            :key="flight.id"
         />
       </div>
     </div>
