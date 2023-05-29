@@ -5,13 +5,12 @@ let consumption = ref(7.5);
 let dropperDest = ref(false);
 let dropperAirport = ref(false);
 let currentPage = ref(0);
-let pages = ref(Math.ceil(store.filteredResults.length / 10));
 </script>
 
 <template>
   <div>
     <div class="relative px-4 py-10 bg-white mx-8 mx-10 shadow rounded-3xl sm:p-10 flex flex-col justify-between">
-      <h2 class="w-full text-center">Wyniki:</h2>
+      <h2 class="w-full text-center">Wyniki wyszukiwania:</h2>
       <!-- Auto -->
       <div v-if="store.getDistances" class="flex flex-line w-full h-[30px]">
         <label class="flex flex-line w-1/2 justify-center">
@@ -95,10 +94,9 @@ let pages = ref(Math.ceil(store.filteredResults.length / 10));
         </div>
       </div>
       <!-- Wyniki -->
-      <ClientOnly>
+      <ClientOnly v-if="store.filteredResults">
         <div class="flex flex-line flex-wrap">
           <FlightThumb
-            v-if="store.filteredResults"
             v-for="flight in store.filteredResults.slice(currentPage*10 , (currentPage+1)*10 )"
             :flight="flight"
             :distances="store.distances"
@@ -110,9 +108,10 @@ let pages = ref(Math.ceil(store.filteredResults.length / 10));
         <div class="flex flex-line">
           <button :disabled="!currentPage" @click="currentPage--">&lt;-</button>
           <p>{{currentPage+1}} / {{Math.ceil(store.filteredResults.length/10)}}</p>
-          <button :disabled="currentPage+1 === pages" @click="currentPage++">-></button>
+          <button :disabled="currentPage+1 === Math.ceil(store.filteredResults.length/10)" @click="currentPage++">-></button>
         </div>
       </ClientOnly>
+      <h2 v-else class="mx-auto py-4 text-3xl">Podano nieprawidłowe dane!</h2>
     </div>
   </div>
 </template>
