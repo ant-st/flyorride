@@ -9,7 +9,11 @@
         kiwiResults: {},
         distances: {},
         fuelConsumption: 7.5,
-        fuelPrice: 1.4
+        fuelPrice: 1.4,
+        filters: {
+          airports: [],
+          destinations: []
+        }
       }
     },
     getters: {
@@ -18,6 +22,23 @@
         if (state.kiwiResults.data) {
           // @ts-ignore
           return [...new Set(state.kiwiResults.data.map(item => item.flyFrom))];
+        }
+      },
+      destinations: (state) => {
+        // @ts-ignore
+        if (state.kiwiResults.data) {
+          // @ts-ignore
+          return [...new Set(state.kiwiResults.data.map(item => item.cityTo))];
+        }
+      },
+      filteredResults: (state) => {
+        // @ts-ignore
+        if (state.kiwiResults.data) {
+          // @ts-ignore
+          return state.kiwiResults.data.filter(flight => {
+            // @ts-ignore
+            return !(state.filters.airports.includes(flight.flyFrom) || state.filters.destinations.includes(flight.cityTo));
+          });
         }
       },
       // @ts-ignore

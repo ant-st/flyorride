@@ -43,7 +43,7 @@ const getKiwiSearchUrl = (query: queryType) => {
   `&one_for_city=0&one_per_date=0` +
   `&adults=${query.travellers}&children=${query.children}` +
   `&only_working_days=false&only_weekends=false&partner_market=pl` +
-  `&max_stopovers=${query.stopovers}&max_sector_stopovers=2&vehicle_type=aircraft&limit=20`;
+  `&max_stopovers=${query.stopovers}&max_sector_stopovers=2&vehicle_type=aircraft&limit=200`;
 
   if (query.dateInterval) {
     result+=`&date_from=${transformDate(query.startDate)}&date_to=${transformDate(query.endDate)}` +
@@ -65,6 +65,11 @@ const handleQueryChange = (newQuery: Object) => {
 
 const getFromKiwi = async () => {
   store.kiwiResults = [];
+  store.filters = {
+    airports: [],
+    destinations: []
+  }
+
   if (query.airport?.includes(',')) {
     query.fromID = await fetch(getKiwiCityUrl(query.airport.split(',')[0]), kiwiSettings).then(r => r.json()).then(r => {
       console.log(r.locations[0].id);

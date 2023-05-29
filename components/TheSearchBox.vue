@@ -172,6 +172,7 @@ export default {
                 </div>
               </div>
               <!-- Kryteria wyszukiwania -->
+              <!--
               <div class="flex flex-col">
                 <p class="leading-loose">Kryteria wyszukiwania:</p>
                 <div class="flex flex-row justify-between">
@@ -204,6 +205,7 @@ export default {
                     </div>
                 </div>
               </div>
+              -->
               <!-- Ludzie -->
               <div class="flex flex-row justify-between items-center space-x-4">
                 <div class="flex flex-col w-1/3 items-between">
