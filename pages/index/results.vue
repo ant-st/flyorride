@@ -9,7 +9,7 @@ let currentPage = ref(0);
 
 <template>
   <div>
-    <div class="relative px-4 py-10 bg-white mx-8 mx-10 shadow rounded-3xl sm:p-10 flex flex-col justify-between">
+    <div class="relative px-4 py-10 bg-white sm:mx-8 shadow rounded-3xl sm:p-10 flex flex-col justify-between">
       <h2 class="w-full text-center">Wyniki wyszukiwania:</h2>
       <!-- Filtry -->
       <div v-if='store.kiwiResults.data && store.kiwiResults.data.length' class="flex flex-line justify-evenly w-full">
@@ -18,7 +18,7 @@ let currentPage = ref(0);
           <div class="flex flex-row justify-between">
             <div class="relative group w-full">
               <button
-                  class="border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex flex-line items-center"
+                  class=" truncate ... border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex flex-line items-center"
                   @click='() => {dropperAirport = !dropperAirport}'
               >
                 <span v-if='dropperAirport'> ⬆️ </span>
@@ -26,7 +26,7 @@ let currentPage = ref(0);
                 <span class="px-1">Ukryj...</span>
                 <span
                     v-for="option in store.filters.airports"
-                    class="px-1"
+                    class="px-1 hidden sm:block"
                 >
                     {{option}}
                   </span>
@@ -34,7 +34,7 @@ let currentPage = ref(0);
               <transition name="transform-fade-down">
                 <ul
                     v-if="dropperAirport"
-                    class="z-20 flex lg:absolute flex-col w-full py-1 lg:bg-white rounded-md lg:shadow-md pl-2 lg:pl-0"
+                    class="z-20 flex absolute flex-col w-full py-1 bg-white rounded-md lg:shadow-md pl-2 lg:pl-0"
                 >
                   <li v-for="dest in store.airports">
                     <label>
@@ -51,7 +51,7 @@ let currentPage = ref(0);
           <div class="flex flex-row justify-between">
             <div class="relative group w-full">
               <button
-                  class="border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex flex-line items-center"
+                  class=" truncate ... border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex flex-line items-center"
                   @click='() => {dropperDest = !dropperDest}'
               >
                 <span v-if='dropperDest'> ⬆️ </span>
@@ -59,7 +59,7 @@ let currentPage = ref(0);
                 <span class="px-1">Ukryj...</span>
                 <span
                     v-for="option in store.filters.destinations"
-                    class="px-1"
+                    class="px-1 hidden sm:block"
                 >
                     {{option}}
                   </span>
@@ -67,7 +67,7 @@ let currentPage = ref(0);
               <transition name="transform-fade-down">
                 <ul
                     v-if="dropperDest"
-                    class="z-20 flex lg:absolute flex-col w-full py-1 lg:bg-white rounded-md lg:shadow-md pl-2 lg:pl-0"
+                    class="z-20 flex absolute flex-col w-full py-1 bg-white rounded-md lg:shadow-md pl-2 lg:pl-0"
                 >
                   <li v-for="dest in store.destinations">
                     <label>
@@ -95,7 +95,7 @@ let currentPage = ref(0);
             </div>
           </label>
         </div>
-        <div class="flex flex-line flex-wrap">
+        <div class="flex flex-line flex-wrap justify-evenly">
           <FlightThumb
             v-for="flight in store.filteredResults.slice(currentPage*10 , (currentPage+1)*10 )"
             :flight="flight"

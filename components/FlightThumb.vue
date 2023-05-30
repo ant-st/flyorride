@@ -45,10 +45,10 @@ const calculateTime = (time1: string, time2: string) => {
 
 <template>
 
-  <div class="relative w-[48%] p-4 bg-blue-50 m-2 my-4 shadow rounded-3xl flex flex-col justify-between">
+  <div class="relative w-full sm:w-[90%] lg:w-[48%] p-4 bg-blue-50 m-2 my-4 shadow rounded-3xl flex flex-col justify-between">
     <!-- First leg -->
     <div class="flex flex-line w-full justify-between items-start">
-      <div class="flex flex-col w-1/3 justify-between h-full">
+      <div class="flex flex-col w-1/3 h-full">
         <p class="text-xs">{{ new Date(firstLeg[0]['local_departure']).toLocaleString() }}</p>
         <div class="flex flex-line items-center">
           <SVGTakeoff/>
@@ -77,7 +77,7 @@ const calculateTime = (time1: string, time2: string) => {
           <p class="text-xs p-2">{{Math.floor(flight.duration.departure / 3600)}} godz. {{flight.duration.departure / 60 % 60}} min.</p>
         </div>
       </div>
-      <div class="flex flex-col w-1/3 justify-between h-full text-right">
+      <div class="flex flex-col w-1/3 h-full text-right">
         <p class="text-xs">{{ new Date(firstLeg[firstLeg.length-1]['local_arrival']).toLocaleString() }}</p>
         <div class="flex flex-line items-center justify-end">
           <div class="flex flex-col p-2">
@@ -92,7 +92,7 @@ const calculateTime = (time1: string, time2: string) => {
     <h3 class="my-6 py-2 mx-auto w-full border-y-2 text-center">{{flight.nightsInDest}} nocy</h3>
     <!-- Second leg -->
     <div class="flex flex-line w-full justify-between items-start mb-6">
-      <div class="flex flex-col w-1/3 justify-between h-full">
+      <div class="flex flex-col w-1/3 h-full">
         <p class="text-xs">{{ new Date(secondLeg[0]['local_departure']).toLocaleString() }}</p>
         <div class="flex flex-line items-center">
           <SVGTakeoff/>
@@ -121,7 +121,7 @@ const calculateTime = (time1: string, time2: string) => {
           <p class="text-xs p-2">{{Math.floor(flight.duration.return / 3600)}} godz. {{flight.duration.return / 60 % 60}} min.</p>
         </div>
       </div>
-      <div class="flex flex-col w-1/3 justify-between h-full text-right">
+      <div class="flex flex-col w-1/3 h-full text-right">
         <p class="text-xs">{{ new Date(secondLeg[secondLeg.length-1]['local_arrival']).toLocaleString() }}</p>
         <div class="flex flex-line items-center justify-end">
           <div class="flex flex-col p-2">
