@@ -18,7 +18,7 @@ let currentPage = ref(0);
           <div class="flex flex-row justify-between">
             <div class="relative group w-full">
               <button
-                  class=" truncate ... border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex flex-line items-center"
+                  class=" truncate ... border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md px-1 md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex flex-line items-center"
                   @click='() => {dropperAirport = !dropperAirport}'
               >
                 <span v-if='dropperAirport'> ⬆️ </span>
@@ -38,7 +38,7 @@ let currentPage = ref(0);
                 >
                   <li v-for="dest in store.airports">
                     <label>
-                      <input type="checkbox" v-model="store.filters.airports" :value='dest' class="mx-2"> {{dest}}
+                      <input type="checkbox" v-model="store.filters.airports" :value='dest' class="mx-1 sm:mx-2"> {{dest}}
                     </label>
                   </li>
                 </ul>
@@ -51,7 +51,7 @@ let currentPage = ref(0);
           <div class="flex flex-row justify-between">
             <div class="relative group w-full">
               <button
-                  class=" truncate ... border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex flex-line items-center"
+                  class=" truncate ... border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md px-1 md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex flex-line items-center"
                   @click='() => {dropperDest = !dropperDest}'
               >
                 <span v-if='dropperDest'> ⬆️ </span>
@@ -67,11 +67,11 @@ let currentPage = ref(0);
               <transition name="transform-fade-down">
                 <ul
                     v-if="dropperDest"
-                    class="z-20 flex absolute flex-col w-full py-1 bg-white rounded-md lg:shadow-md pl-2 lg:pl-0"
+                    class="z-20 flex absolute flex-col w-[120%] sm:w-full py-1 bg-white rounded-md lg:shadow-md pl-2 lg:pl-0"
                 >
                   <li v-for="dest in store.destinations">
                     <label>
-                      <input type="checkbox" v-model="store.filters.destinations" :value='dest' class="mx-2"> {{dest}}
+                      <input type="checkbox" v-model="store.filters.destinations" :value='dest' class="mx-1 sm:mx-2"> {{dest}}
                     </label>
                   </li>
                 </ul>

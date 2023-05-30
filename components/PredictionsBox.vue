@@ -12,9 +12,9 @@ defineEmits(['update:prediction', 'closeBox']);
 <template>
   <transition name="transform-fade-down">
     <ul
-        class="flex absolute top-20 z-30 flex-col w-full truncate ... py-1 lg:bg-white rounded-md lg:shadow-md pl-2 lg:pl-0"
+        class="flex absolute top-20 z-30 flex-col w-full truncate ... py-1 bg-white rounded-md shadow-md pl-2 lg:pl-0"
     >
-      <li v-for="pred in props.preds" class="p-2">
+      <li v-for="pred in props.preds" class="p-1 sm:p-2">
         <button @click = "() => {$emit('update:prediction', pred); $emit('closeBox');}" class="text-sm">{{pred}}</button>
       </li>
     </ul>

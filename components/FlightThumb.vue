@@ -45,7 +45,7 @@ const calculateTime = (time1: string, time2: string) => {
 
 <template>
 
-  <div class="relative w-full sm:w-[90%] lg:w-[48%] p-4 bg-blue-50 m-2 my-4 shadow rounded-3xl flex flex-col justify-between">
+  <div class="relative w-full sm:w-[90%] lg:w-[48%] p-2.5 sm:p-4 bg-blue-50 sm:m-2 my-4 shadow rounded-3xl flex flex-col justify-between">
     <!-- First leg -->
     <div class="flex flex-line w-full justify-between items-start">
       <div class="flex flex-col w-1/3 h-full">
@@ -53,7 +53,7 @@ const calculateTime = (time1: string, time2: string) => {
         <div class="flex flex-line items-center">
           <SVGTakeoff/>
           <div class="flex flex-col p-2">
-            <p class="text-lg">{{firstLeg[0].cityFrom}}</p>
+            <p class="text-sm sm:text-lg">{{firstLeg[0].cityFrom}}</p>
             <p class="text-xs">{{firstLeg[0].flyFrom}}</p>
           </div>
         </div>
@@ -81,7 +81,7 @@ const calculateTime = (time1: string, time2: string) => {
         <p class="text-xs">{{ new Date(firstLeg[firstLeg.length-1]['local_arrival']).toLocaleString() }}</p>
         <div class="flex flex-line items-center justify-end">
           <div class="flex flex-col p-2">
-            <p class="text-lg">{{firstLeg[firstLeg.length-1].cityTo}}</p>
+            <p class="text-sm sm:text-lg">{{firstLeg[firstLeg.length-1].cityTo}}</p>
             <p class="text-xs">{{firstLeg[firstLeg.length-1].flyTo}}</p>
           </div>
           <SVGLanding/>
@@ -97,7 +97,7 @@ const calculateTime = (time1: string, time2: string) => {
         <div class="flex flex-line items-center">
           <SVGTakeoff/>
           <div class="flex flex-col p-2">
-            <p class="text-lg">{{secondLeg[0].cityFrom}}</p>
+            <p class="text-sm sm:text-lg">{{secondLeg[0].cityFrom}}</p>
             <p class="text-xs">{{secondLeg[0].flyFrom}}</p>
           </div>
         </div>
@@ -125,7 +125,7 @@ const calculateTime = (time1: string, time2: string) => {
         <p class="text-xs">{{ new Date(secondLeg[secondLeg.length-1]['local_arrival']).toLocaleString() }}</p>
         <div class="flex flex-line items-center justify-end">
           <div class="flex flex-col p-2">
-            <p class="text-lg">{{secondLeg[secondLeg.length-1].cityTo}}</p>
+            <p class="text-sm sm:text-lg">{{secondLeg[secondLeg.length-1].cityTo}}</p>
             <p class="text-xs">{{secondLeg[secondLeg.length-1].flyTo}}</p>
           </div>
           <SVGLanding/>
@@ -142,26 +142,26 @@ const calculateTime = (time1: string, time2: string) => {
       <p class="w-[35%] px-2">{{distances[flight.flyFrom].duration.text}}</p>
     </div>
     <!-- Cost -->
-    <div class="flex flex-line justify-between items-center border-t-2 p-2">
+    <div class="flex flex-line justify-between items-center border-t-2 p-1 sm:p-2">
       <ul class="w-1/3">
         <li class="flex flex-line items-center">
           <img src="../media/plane1.svg" class="w-[40px]"/>
-          <span class="text-sm px-2">{{queryStore.query.travellers}}x</span> {{flight.fare.adults}}€
+          <span class="text-sm pr-2">{{queryStore.query.travellers}}x</span> {{flight.fare.adults}}€
         </li>
         <li v-if="queryStore.query.children" class="flex flex-line items-center">
           <img src="../media/plane1.svg" class="w-[40px]"/>
-          <span class="text-sm px-2">{{queryStore.query.children}}x</span> {{flight.fare.children}}€
+          <span class="text-sm pr-2">{{queryStore.query.children}}x</span> {{flight.fare.children}}€
         </li>
         <li class="flex flex-line items-center">
           <img src="../media/suitcase.svg" class="w-[40px]"/>
-          <span class="text-sm px-2">max.</span> {{flight['bags_price']['1'].toFixed(2)}}€
+          <span class="text-sm pr-2">max.</span> {{flight['bags_price']['1'].toFixed(2)}}€
         </li>
         <li class="flex flex-line items-center" v-if="distances && distances[flight.flyFrom] && showCost">
           <img src="../media/carIcon.svg" class="w-[40px]"/>
-          <span class="text-sm px-2">2x</span> {{distances[flight.flyFrom].cost}}€
+          <span class="text-sm pr-2">2x</span> {{distances[flight.flyFrom].cost}}€
         </li>
       </ul>
-      <button class="text-3xl" @click="() => favoritesStore.toggle(flight)">{{favoritesStore.checkId(flight.id) ? '❤️' : '🤍' }}</button>
+      <button class="text-xl sm:text-3xl" @click="() => favoritesStore.toggle(flight)">{{favoritesStore.checkId(flight.id) ? '❤️' : '🤍' }}</button>
       <h3 class="text-3xl hover:underline w-1/3 text-right">
         <NuxtLink :to="flight['deep_link']" target="_blank" rel="noopener">
         {{ (Number(flight.price) + ((distances && distances[flight.flyFrom] && showCost ) ? Number(distances[flight.flyFrom].cost)*2 : 0)).toFixed(2) }}€
