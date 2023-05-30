@@ -15,14 +15,13 @@ let currentPage = ref(0);
       <div v-if='store.kiwiResults.data && store.kiwiResults.data.length' class="flex flex-line justify-evenly w-full">
         <div class="flex flex-col w-1/3">
           <p class="leading-loose">Ukryj loty z:</p>
-          <div class="flex flex-row justify-between">
+          <div class="flex flex-row justify-between mb-4">
             <div class="relative group w-full">
               <button
                   class=" truncate ... border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md px-1 md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex flex-line items-center"
                   @click='() => {dropperAirport = !dropperAirport}'
               >
-                <span v-if='dropperAirport'> ⬆️ </span>
-                <span v-else> ⬇️ </span>
+                <span> <img :class="{rotate: dropperAirport}" src="../../media/downArrow.png" class="h-[15px] transition-transform duration-200"/>  </span>
                 <span class="px-1">Ukryj...</span>
                 <span
                     v-for="option in store.filters.airports"
@@ -54,8 +53,7 @@ let currentPage = ref(0);
                   class=" truncate ... border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md px-1 md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex flex-line items-center"
                   @click='() => {dropperDest = !dropperDest}'
               >
-                <span v-if='dropperDest'> ⬆️ </span>
-                <span v-else> ⬇️ </span>
+                <span > <img :class="{rotate: dropperDest}" src="../../media/downArrow.png" class="h-[15px] transition-transform duration-200"/>  </span>
                 <span class="px-1">Ukryj...</span>
                 <span
                     v-for="option in store.filters.destinations"
@@ -105,11 +103,27 @@ let currentPage = ref(0);
             :key="flight.id"
           />
         </div>
-        <div class="flex flex-line">
-          <button :disabled="!currentPage" @click="currentPage--">&lt;-</button>
-          <p>{{currentPage+1}} / {{Math.ceil(store.filteredResults.length/10)}}</p>
-          <button :disabled="currentPage+1 === Math.ceil(store.filteredResults.length/10)" @click="currentPage++">-></button>
+        <div class="mt-6 flex flex-line w-full justify-center">
+
+          <button
+              :disabled="!currentPage"
+              @click="currentPage--"
+              class="p-2 arrow transition-opacity transition-duration-300"
+          >
+            <img src="../../media/downArrow.png" class="h-[20px] rotate-90 hover:rotate"/>
+          </button>
+
+          <p class="p-2">{{currentPage+1}} / {{Math.ceil(store.filteredResults.length/10)}}</p>
+
+          <button
+              :disabled="currentPage+1 === Math.ceil(store.filteredResults.length/10)"
+              @click="currentPage++"
+              class="p-2 arrow transition-opacity transition-duration-300"
+          >
+            <img src="../../media/downArrow.png" class="h-[20px] -rotate-90"/>
+          </button>
         </div>
+
       </ClientOnly>
       <div v-else>
         <h2 class="w-full text-center text-2xl py-4">Nie znaleziono wyników :(</h2>
@@ -118,4 +132,14 @@ let currentPage = ref(0);
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+.arrow:disabled {
+  opacity: 0.3;
+}
+
+</style>

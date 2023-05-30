@@ -161,7 +161,21 @@ const calculateTime = (time1: string, time2: string) => {
           <span class="text-sm pr-2">2x</span> {{distances[flight.flyFrom].cost}}€
         </li>
       </ul>
-      <button class="text-xl sm:text-3xl" @click="() => favoritesStore.toggle(flight)">{{favoritesStore.checkId(flight.id) ? '❤️' : '🤍' }}</button>
+
+      <!--
+      <button class="text-xl sm:text-3xl" @click="() => favoritesStore.toggle(flight)">
+        {{favoritesStore.checkId(flight.id) ? '❤️' : '🤍' }}
+      </button>
+      -->
+
+      <img src="../media/heartIcon.png"
+           @click="() => favoritesStore.toggle(flight)"
+           class="h-[40px] heartIcon"
+           :class="{
+            notFavorite: !favoritesStore.checkId(flight.id)
+           }"
+      />
+
       <h3 class="text-3xl hover:underline w-1/3 text-right">
         <NuxtLink :to="flight['deep_link']" target="_blank" rel="noopener">
         {{ (Number(flight.price) + ((distances && distances[flight.flyFrom] && showCost ) ? Number(distances[flight.flyFrom].cost)*2 : 0)).toFixed(2) }}€
@@ -175,5 +189,19 @@ const calculateTime = (time1: string, time2: string) => {
 <style scoped>
 .stopover:hover > span {
   display: block;
+}
+
+.notFavorite {
+  filter: grayscale(1);
+  -webkit-filter: grayscale(1)
+}
+
+.heartIcon {
+  -webkit-transition: 0.2s -webkit-filter linear;
+  -moz-transition: 0.2s -moz-filter linear;
+  -moz-transition: 0.2s filter linear;
+  -ms-transition: 0.2s -ms-filter linear;
+  -o-transition: 0.2s -o-filter linear;
+  transition: 0.2s filter linear, 1s -webkit-filter linear;
 }
 </style>
