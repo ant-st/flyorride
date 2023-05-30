@@ -13,7 +13,8 @@
         filters: {
           airports: [],
           destinations: []
-        }
+        },
+        error: '',
       }
     },
     getters: {

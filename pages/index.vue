@@ -60,10 +60,14 @@ const getKiwiSearchUrl = (query: queryType) => {
 
 const handleQueryChange = (newQuery: Object) => {
   query = newQuery;
-  getFromKiwi();
+  //@ts-ignore
+  store.status = getFromKiwi();
 }
 
 const getFromKiwi = async () => {
+  navigateTo('/searching');
+  let searchError = false;
+
   store.kiwiResults = [];
   store.filters = {
     airports: [],
@@ -74,12 +78,20 @@ const getFromKiwi = async () => {
     query.fromID = await fetch(getKiwiCityUrl(query.airport.split(',')[0]), kiwiSettings).then(r => r.json()).then(r => {
       console.log(r.locations[0].id);
       return r.locations[0].id;
+    }).catch(e => {
+      store.error = 'Nie znaleziono miejsca startu';
+      navigateTo('/error');
+      searchError = true;
     });
   }
   else {
     query.fromID = await fetch(getKiwiCountryUrl(query.airport), kiwiSettings).then(r => r.json()).then(r => {
       console.log(r.locations[0].id);
       return r.locations[0].id;
+    }).catch(e => {
+      store.error = 'Nie znaleziono miejsca startu';
+      navigateTo('/error');
+      searchError = true;
     });
   }
 
@@ -87,20 +99,39 @@ const getFromKiwi = async () => {
     query.toID = await fetch(getKiwiCityUrl(query.to.split(',')[0]), kiwiSettings).then(r => r.json()).then(r => {
       console.log(r.locations[0].id);
       return r.locations[0].id;
+    }).catch(e => {
+      store.error = 'Nie znaleziono miejsca docelowego';
+      navigateTo('/error');
+      searchError = true;
     });
   }
   else {
     query.toID = await fetch(getKiwiCountryUrl(query.to), kiwiSettings).then(r => r.json()).then(r => {
       console.log(r.locations[0].id);
       return r.locations[0].id;
+    }).catch(e => {
+      store.error = 'Nie znaleziono miejsca docelowego';
+      navigateTo('/error');
+      searchError = true;
     });
   }
 
-  await fetch(getKiwiSearchUrl(query), kiwiSettings).then(r => r.json()).then(r => {
-    console.log(r);
-    store.kiwiResults = r;
-    navigateTo('/results')
-  });
+  if (!searchError) {
+    await fetch(getKiwiSearchUrl(query), kiwiSettings).then(r => r.json()).then(r => {
+      console.log(r);
+      if (r.error) {
+        store.error = r.error;
+        navigateTo('/error');
+      }
+      else {
+        store.kiwiResults = r;
+        navigateTo('/results');
+      }
+    }).catch(e => {
+      store.error = e;
+      navigateTo('/error');
+    });
+  }
 }
 
 </script>
