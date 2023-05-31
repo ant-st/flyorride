@@ -106,7 +106,7 @@ export default {
               <!-- Start i cel -->
               <div class="flex flex-row justify-between space-x-4">
                 <div class="relative flex flex-col" >
-                  <label class="leading-loose text-xs sm:text-base sm:py-1">Start:</label>
+                  <label class="leading-loose text-xs sm:text-base sm:py-1">Skąd ruszasz:</label>
                   <input required @focus="activateInput('from')"  type="text" v-model="searchQuery.from" class="px-1 sm:px-4 py-2  border focus:ring-gray-500 focus:border-gray-900 w-full text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Start">
                   <PredictionsBox
                       :preds='preds'
@@ -116,7 +116,7 @@ export default {
                   />
                 </div>
                 <div class="relative flex flex-col justify-end" >
-                  <label class="leading-loose text-xs sm:text-base sm:py-1">Lotniska:</label>
+                  <label class="leading-loose text-xs sm:text-base sm:py-1">Skąd lecimy:</label>
                   <input required @focus="activateInput('airport')"  type="text" v-model="searchQuery.airport" class="px-1 sm:px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="Lotniska">
                   <PredictionsBox
                       :preds='preds'
@@ -139,8 +139,8 @@ export default {
               <!-- Daty -->
               <div class="flex flex-row flex-wrap justify-between items-center">
                 <div class="flex flex-line justify-evenly w-full sm:w-2/3">
-                  <div class="flex flex-col items-between w-1/2">
-                    <label class="leading-loose text-xs sm:text-base sm:py-1">Wylot{{searchQuery.dateInterval ? ' od ' : ''}}:</label>
+                  <div class="flex flex-col items-between pr-2 w-1/2">
+                    <label class="leading-loose text-xs sm:text-base sm:py-1">Wylot{{searchQuery.dateInterval ? ' od' : ' dnia'}}:</label>
                     <div class="relative focus-within:text-gray-600 text-gray-400 w-full">
                       <input required type="date" v-model="searchQuery.startDate" class="md:pr-4 md:pl-10 px-1 sm:px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="25/02/2020">
                       <div class="hidden md:block absolute left-3 top-2">
@@ -148,8 +148,8 @@ export default {
                       </div>
                     </div>
                   </div>
-                  <div class="flex flex-col items-between pl-4 w-1/2">
-                    <label class="leading-loose text-xs sm:text-base sm:py-1">{{ searchQuery.dateInterval ? 'Wylot do:' : 'Powrót:' }}</label>
+                  <div class="flex flex-col items-between pl-2 w-1/2">
+                    <label class="leading-loose text-xs sm:text-base sm:py-1">{{ searchQuery.dateInterval ? 'Wylot do:' : 'Powrót dnia:' }}</label>
                     <div class="relative focus-within:text-gray-600 text-gray-400 w-full">
                       <input :min="searchQuery.startDate" required type="date" v-model="searchQuery.endDate" class="md:pr-4 md:pl-10 px-1 sm:px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="26/02/2020">
                       <div class="hidden md:block absolute left-3 top-2">
@@ -158,17 +158,18 @@ export default {
                     </div>
                   </div>
                 </div>
-                <div class="flex flex-col justify-evenly items-between py-2 sm:py-0 sm:pl-4 w-1/2 sm:w-1/3 mx-auto">
+                <div class="flex flex-col justify-evenly items-between py-2 sm:py-0 sm:pl-4 w-1/2 sm:w-1/3 mx-auto ">
                   <label class="leading-loose text-xs sm:text-base sm:py-1">Liczba dni:</label>
-                  <div class="w-full flex flex-line justify-between">
+                  <div class="w-full flex flex-line justify-between items-center">
                     <div class="relative focus-within:text-gray-600 text-gray-400 w-1/4">
-                      <input type="checkbox" v-model="searchQuery.dateInterval" class="m-2 px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
+                      <input type="checkbox" v-model="searchQuery.dateInterval" class="mr-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
                     </div>
                     <div class="relative focus-within:text-gray-600 text-gray-400 w-1/3">
-                      <input :disabled='!searchQuery.dateInterval' type="number" v-model="searchQuery.minNights" min=0 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
+                      <input :disabled='!searchQuery.dateInterval' type="number" v-model="searchQuery.minNights" min=0 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none disabled:bg-gray-200 text-gray-600">
                     </div>
+                    <p class="p-1">-</p>
                     <div class="relative focus-within:text-gray-600 text-gray-400 w-1/3">
-                      <input :disabled='!searchQuery.dateInterval' type="number" v-model="searchQuery.maxNights" :min="searchQuery.minNights" class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
+                      <input :disabled='!searchQuery.dateInterval' type="number" v-model="searchQuery.maxNights" :min="searchQuery.minNights" class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none disabled:bg-gray-200  text-gray-600">
                     </div>
                   </div>
                 </div>
@@ -209,19 +210,20 @@ export default {
               </div>
               -->
               <!-- Ludzie -->
-              <div class="flex flex-row justify-between items-center space-x-4">
+              <div class="flex flex-row justify-between items-center space-x-4 pt-2 border-t-2">
                 <div class="flex flex-col w-1/3 items-between">
-                  <label class="leading-loose text-xs sm:text-base sm:py-1">Dorośli i dzieci:</label>
-                  <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px] flex flex-line">
+                  <label class="leading-loose text-xs sm:text-base sm:py-1 text-center">Dorośli / dzieci:</label>
+                  <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px] flex flex-line items-center">
                     <div class="w-1/2 pr-0.5 sm:p-2">
                       <input type="number" v-model="searchQuery.travellers" min=1 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
                     </div>
+                    <p class="p-1">/</p>
                     <div class="w-1/2 pl-0.5 sm:p-2">
                       <input type="number" v-model="searchQuery.children" min=0 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
                     </div>
                   </div>
                 </div>
-                <div class="flex flex-col w-1/3 items-between">
+                <div class="flex flex-col w-1/3 items-between text-center">
                   <label class="leading-loose text-sm sm:text-base sm:py-1">Powrót:</label>
                   <div class="relative w-full max-w-[155px] flex flex-line">
                     <div class="w-full sm:p-2">
@@ -236,10 +238,10 @@ export default {
                     </div>
                   </div>
                 </div>
-                <div class="flex flex-col w-1/3 items-between">
+                <div class="flex flex-col w-1/3 items-between text-center">
                   <label class="leading-loose text-xs sm:text-base sm:py-1">Maks. przesiadki:</label>
                   <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px] flex flex-line">
-                    <div class="w-[80%] sm:p-2">
+                    <div class="w-[80%] sm:p-2 mx-auto">
                       <input type="number" v-model="searchQuery.stopovers" min=0 class="px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
                     </div>
                   </div>
