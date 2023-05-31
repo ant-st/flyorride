@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-const store = useKiwiResultsStore();
+const kiwiStore = useKiwiResultsStore();
+const carStore = useCarStore();
+
 let showCost = ref(false);
-let consumption = ref(7.5);
+
 let dropperDest = ref(false);
 let dropperAirport = ref(false);
 let currentPage = ref(0);
@@ -12,7 +14,7 @@ let currentPage = ref(0);
     <div class="relative px-4 py-10 bg-white sm:mx-8 shadow rounded-3xl sm:p-10 flex flex-col justify-between">
       <h2 class="w-full text-center">Wyniki wyszukiwania:</h2>
       <!-- Filtry -->
-      <div v-if='store.kiwiResults.data && store.kiwiResults.data.length' class="flex flex-line justify-evenly w-full">
+      <div v-if='kiwiStore.kiwiResults.data && kiwiStore.kiwiResults.data.length' class="flex flex-line justify-evenly w-full">
         <div class="flex flex-col w-1/3">
           <p class="leading-loose">Ukryj loty z:</p>
           <div class="flex flex-row justify-between mb-4">
@@ -24,7 +26,7 @@ let currentPage = ref(0);
                 <span> <img :class="{rotate: dropperAirport}" src="../../media/downArrow.png" class="h-[15px] transition-transform duration-200"/>  </span>
                 <span class="px-1">Ukryj...</span>
                 <span
-                    v-for="option in store.filters.airports"
+                    v-for="option in kiwiStore.filters.airports"
                     class="px-1 hidden sm:block"
                 >
                     {{option}}
@@ -35,9 +37,9 @@ let currentPage = ref(0);
                     v-if="dropperAirport"
                     class="z-20 flex absolute flex-col w-full py-1 bg-white rounded-md lg:shadow-md pl-2 lg:pl-0"
                 >
-                  <li v-for="dest in store.airports">
+                  <li v-for="dest in kiwiStore.airports">
                     <label>
-                      <input type="checkbox" v-model="store.filters.airports" :value='dest' class="mx-1 sm:mx-2"> {{dest}}
+                      <input type="checkbox" v-model="kiwiStore.filters.airports" :value='dest' class="mx-1 sm:mx-2"> {{dest}}
                     </label>
                   </li>
                 </ul>
@@ -56,7 +58,7 @@ let currentPage = ref(0);
                 <span > <img :class="{rotate: dropperDest}" src="../../media/downArrow.png" class="h-[15px] transition-transform duration-200"/>  </span>
                 <span class="px-1">Ukryj...</span>
                 <span
-                    v-for="option in store.filters.destinations"
+                    v-for="option in kiwiStore.filters.destinations"
                     class="px-1 hidden sm:block"
                 >
                     {{option}}
@@ -67,9 +69,9 @@ let currentPage = ref(0);
                     v-if="dropperDest"
                     class="z-20 flex absolute flex-col w-[120%] sm:w-full py-1 bg-white rounded-md lg:shadow-md pl-2 lg:pl-0"
                 >
-                  <li v-for="dest in store.destinations">
+                  <li v-for="dest in kiwiStore.destinations">
                     <label>
-                      <input type="checkbox" v-model="store.filters.destinations" :value='dest' class="mx-1 sm:mx-2"> {{dest}}
+                      <input type="checkbox" v-model="kiwiStore.filters.destinations" :value='dest' class="mx-1 sm:mx-2"> {{dest}}
                     </label>
                   </li>
                 </ul>
@@ -79,9 +81,9 @@ let currentPage = ref(0);
         </div>
       </div>
       <!-- Wyniki -->
-      <ClientOnly v-if="store.filteredResults && store.filteredResults.length">
+      <ClientOnly v-if="kiwiStore.filteredResults && kiwiStore.filteredResults.length">
         <!-- Auto -->
-        <div v-if="store.getDistances" class="flex flex-line w-full h-[30px]">
+        <div v-if="carStore.distances" class="flex flex-line w-full h-[30px]">
           <label class="flex flex-line w-1/2 justify-center">
             <p>Pokaż koszty dojazdu samochodem na lotnisko: </p>
             <input type="checkbox" class="p-2 m-2" v-model="showCost"/>
@@ -95,11 +97,11 @@ let currentPage = ref(0);
         </div>
         <div class="flex flex-line flex-wrap justify-evenly">
           <FlightThumb
-            v-for="flight in store.filteredResults.slice(currentPage*10 , (currentPage+1)*10 )"
+            v-for="flight in kiwiStore.filteredResults.slice(currentPage*10 , (currentPage+1)*10 )"
             :flight="flight"
-            :distances="store.distances"
+            :distances="carStore.distances"
             :showCost="showCost"
-            :consumption="consumption"
+            :consumption="carStore.fuelConsumption"
             :key="flight.id"
           />
         </div>
@@ -113,10 +115,10 @@ let currentPage = ref(0);
             <img src="../../media/downArrow.png" class="h-[20px] rotate-90 hover:rotate"/>
           </button>
 
-          <p class="p-2">{{currentPage+1}} / {{Math.ceil(store.filteredResults.length/10)}}</p>
+          <p class="p-2">{{ currentPage + 1 }} / {{ Math.ceil(kiwiStore.filteredResults.length / 10) }}</p>
 
           <button
-              :disabled="currentPage+1 === Math.ceil(store.filteredResults.length/10)"
+              :disabled="currentPage+1 === Math.ceil(kiwiStore.filteredResults.length/10)"
               @click="currentPage++"
               class="p-2 arrow transition-opacity transition-duration-300"
           >

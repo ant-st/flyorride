@@ -210,7 +210,7 @@ export default {
               </div>
               -->
               <!-- Ludzie -->
-              <div class="flex flex-row justify-between items-center space-x-4 pt-2 border-t-2">
+              <div class="flex flex-row justify-between items-center space-x-4 pt-2 border-t-2 border-blue-200">
                 <div class="flex flex-col w-1/3 items-between">
                   <label class="leading-loose text-xs sm:text-base sm:py-1 text-center">Dorośli / dzieci:</label>
                   <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px] flex flex-line items-center">
