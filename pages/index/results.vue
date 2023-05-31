@@ -3,7 +3,10 @@ import {storeToRefs} from "pinia";
 
 const kiwiStore = useKiwiResultsStore();
 const carStore = useCarStore();
-carStore.getAirportsDistances();
+const queryStore = useQueryStore();
+
+//@ts-ignore
+if (queryStore.query.options.find(el => el.value === 'carTransfer')) carStore.getAirportsDistances();
 
 const {distances, distancesLength} = storeToRefs(carStore);
 
@@ -20,6 +23,18 @@ let currentPage = ref(0);
     <div class="relative px-4 py-10 bg-white sm:mx-8 shadow rounded-3xl sm:p-10 flex flex-col justify-between">
       <h2 class="w-full text-center">Wyniki wyszukiwania:</h2>
       <!-- Filtry -->
+      <div v-if="distancesLength" class="flex flex-line w-full h-[30px]">
+        <label class="flex flex-line w-1/2 justify-center">
+          <p>Pokaż koszty dojazdu samochodem na lotnisko: </p>
+          <input type="checkbox" class="p-2 m-2" v-model="showCost"/>
+        </label>
+        <label class="leading-loose flex flex-line w-1/2 justify-center" v-if="showCost">
+          <p>Spalanie auta:</p>
+          <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px] flex flex-line">
+            <input type="number" v-model="consumption" min=1 step=0.5 class="mx-2 px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
+          </div>
+        </label>
+      </div>
       <div v-if='kiwiStore.kiwiResults.data && kiwiStore.kiwiResults.data.length' class="flex flex-line justify-evenly w-full">
         <div class="flex flex-col w-1/3">
           <p class="leading-loose">Ukryj loty z:</p>
@@ -87,22 +102,10 @@ let currentPage = ref(0);
         </div>
       </div>
 
-
       <!-- Wyniki -->
       <ClientOnly v-if="kiwiStore.filteredResults && kiwiStore.filteredResults.length">
         <!-- Auto -->
-        <div v-if="distancesLength" class="flex flex-line w-full h-[30px]">
-          <label class="flex flex-line w-1/2 justify-center">
-            <p>Pokaż koszty dojazdu samochodem na lotnisko: </p>
-            <input type="checkbox" class="p-2 m-2" v-model="showCost"/>
-          </label>
-          <label class="leading-loose flex flex-line w-1/2 justify-center" v-if="showCost">
-            <p>Spalanie auta:</p>
-            <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px] flex flex-line">
-              <input type="number" v-model="consumption" min=1 step=0.5 class="mx-2 px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
-            </div>
-          </label>
-        </div>
+
         <div class="flex flex-line flex-wrap justify-evenly">
           <FlightThumb
             v-for="flight in kiwiStore.filteredResults.slice(currentPage*10 , (currentPage+1)*10 )"

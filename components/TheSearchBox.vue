@@ -5,11 +5,12 @@ export default {
     return {
       dropper: false,
       searchOptions: [
+        {name: 'Podróż samochodem - tba', value: 'drive'},
         {name: 'Podróż samolotem', value: 'flight'},
-        {name: 'Podróż samochodem', value: 'drive'},
-        {name: 'Nocleg', value: 'sleep'},
-        {name: 'Wynajem auta', value: 'carRent'},
-        {name: 'Atrakcje', value: 'events'},
+        {name: 'Dojazd autem na lotnisko', value: 'carTransfer'},
+        {name: 'Nocleg - tba', value: 'sleep'},
+        {name: 'Wynajem auta - tba', value: 'carRent'},
+        {name: 'Atrakcje - tba', value: 'events'},
       ],
       searchQuery: useStorage('query', {
         'from': '',
@@ -42,9 +43,11 @@ export default {
       this.searchQuery[this.activeInput] = newVal;
     },
     handleSearch() {
-      const store = useQueryStore();
-      store.query = this.searchQuery;
-      this.$emit('update:query', this.searchQuery);
+      if (this.searchQuery.options.length) {
+        const store = useQueryStore();
+        store.query = this.searchQuery;
+        this.$emit('update:query', this.searchQuery);
+      }
     },
     handleReset() {
       this.searchQuery = {
@@ -175,22 +178,20 @@ export default {
                 </div>
               </div>
               <!-- Kryteria wyszukiwania -->
-              <!--
               <div class="flex flex-col">
                 <p class="leading-loose">Kryteria wyszukiwania:</p>
                 <div class="flex flex-row justify-between">
                     <div class="relative group w-full">
                       <button
-                          class="border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex flex-line items-center justify-between"
-                          @click='toggleDropper'
+                          class="truncate ... border focus:ring-gray-500 focus:border-gray-900 w-full text-xs sm:text-sm border-gray-300 rounded-md p-2 bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline flex flex-line items-center"
+                          @click.prevent='toggleDropper'
                       >
+                        <img :class="{rotate: dropper}" src="../media/downArrow.png" class="h-[15px] transition-transform duration-200 px-1"/>
                         <span v-if='!searchQuery.options[0]'>Szukaj...</span>
-                        <span v-else v-for="option in searchQuery.options">
-                          {{option}},
-                        </span>
 
-                        <span v-if='dropper' class="px-2"> ⬆️ </span>
-                        <span v-else class="px-2"> ⬇️ </span>
+                        <span v-else v-for="(option, index) in searchQuery.options" class="pr-1">
+                          {{option.name}}{{index !== searchQuery.options.length-1 ? ', ' : ''}}
+                        </span>
 
                       </button>
                       <transition name="transform-fade-down">
@@ -200,7 +201,7 @@ export default {
                         >
                           <li v-for="option in searchOptions">
                             <label>
-                              <input type="checkbox" v-model="searchQuery.options" :value='option.value' class="mx-2"> {{option.name}}
+                              <input type="checkbox" v-model="searchQuery.options" :value='option' class="mx-2"> {{option.name}}
                             </label>
                           </li>
                         </ul>
@@ -208,8 +209,7 @@ export default {
                     </div>
                 </div>
               </div>
-              -->
-              <!-- Ludzie -->
+              <!-- Ludzie i parametry-->
               <div class="flex flex-row justify-between items-center space-x-4 pt-2 border-t-2 border-blue-200">
                 <div class="flex flex-col w-1/3 items-between">
                   <label class="leading-loose text-xs sm:text-base sm:py-1 text-center">Dorośli / dzieci:</label>
@@ -223,7 +223,7 @@ export default {
                     </div>
                   </div>
                 </div>
-                <div class="flex flex-col w-1/3 items-between text-center">
+                <div v-if='searchQuery.options.find(el => el.value === "flight")' class="flex flex-col w-1/3 items-between text-center">
                   <label class="leading-loose text-sm sm:text-base sm:py-1">Powrót:</label>
                   <div class="relative w-full max-w-[155px] flex flex-line">
                     <div class="w-full sm:p-2">
@@ -238,7 +238,7 @@ export default {
                     </div>
                   </div>
                 </div>
-                <div class="flex flex-col w-1/3 items-between text-center">
+                <div v-if='searchQuery.options.find(el => el.value === "flight")' class="flex flex-col w-1/3 items-between text-center">
                   <label class="leading-loose text-xs sm:text-base sm:py-1">Maks. przesiadki:</label>
                   <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px] flex flex-line">
                     <div class="w-[80%] sm:p-2 mx-auto">
@@ -262,4 +262,10 @@ export default {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+</style>
