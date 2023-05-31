@@ -42,6 +42,9 @@ export const useCarStore = defineStore('car', {
               });
             }
           }
+        },
+        updateConsumption: function(newConsumption: number) {
+          this.fuelConsumption = newConsumption;
         }
       },
       getters: {

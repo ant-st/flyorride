@@ -17,7 +17,7 @@ type queryType = {
   'consumption'?: Number,
   'returnFromOther'?: Boolean,
   'returnToOther'?: Boolean,
-  'stopovers'?: Number
+  'stopovers'?: Number,
 
 }
 

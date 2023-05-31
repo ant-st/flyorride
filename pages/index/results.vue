@@ -4,9 +4,14 @@ import {storeToRefs} from "pinia";
 const kiwiStore = useKiwiResultsStore();
 const carStore = useCarStore();
 const queryStore = useQueryStore();
+//@ts-ignore
+const carTransfer = queryStore.query.options.find(el => el.value === 'carTransfer');
 
 //@ts-ignore
-if (queryStore.query.options.find(el => el.value === 'carTransfer')) carStore.getAirportsDistances();
+if (carTransfer) {
+  carStore.updateConsumption(queryStore.query.consumption);
+  carStore.getAirportsDistances();
+}
 
 const {distances, distancesLength} = storeToRefs(carStore);
 
@@ -23,7 +28,7 @@ let currentPage = ref(0);
     <div class="relative px-4 py-10 bg-white sm:mx-8 shadow rounded-3xl sm:p-10 flex flex-col justify-between">
       <h2 class="w-full text-center">Wyniki wyszukiwania:</h2>
       <!-- Filtry -->
-      <div v-if="distancesLength" class="flex flex-line w-full h-[30px]">
+      <div v-if="carTransfer" class="flex flex-line w-full h-[30px]">
         <label class="flex flex-line w-1/2 justify-center">
           <p>Pokaż koszty dojazdu samochodem na lotnisko: </p>
           <input type="checkbox" class="p-2 m-2" v-model="showCost"/>
