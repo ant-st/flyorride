@@ -1,12 +1,18 @@
 <script lang="ts" setup>
+import {storeToRefs} from "pinia";
+
 const kiwiStore = useKiwiResultsStore();
 const carStore = useCarStore();
+carStore.getAirportsDistances();
+
+const {distances, distancesLength} = storeToRefs(carStore);
 
 let showCost = ref(false);
 
 let dropperDest = ref(false);
 let dropperAirport = ref(false);
 let currentPage = ref(0);
+
 </script>
 
 <template>
@@ -80,10 +86,12 @@ let currentPage = ref(0);
           </div>
         </div>
       </div>
+
+
       <!-- Wyniki -->
       <ClientOnly v-if="kiwiStore.filteredResults && kiwiStore.filteredResults.length">
         <!-- Auto -->
-        <div v-if="carStore.distances" class="flex flex-line w-full h-[30px]">
+        <div v-if="distancesLength" class="flex flex-line w-full h-[30px]">
           <label class="flex flex-line w-1/2 justify-center">
             <p>Pokaż koszty dojazdu samochodem na lotnisko: </p>
             <input type="checkbox" class="p-2 m-2" v-model="showCost"/>
@@ -99,10 +107,9 @@ let currentPage = ref(0);
           <FlightThumb
             v-for="flight in kiwiStore.filteredResults.slice(currentPage*10 , (currentPage+1)*10 )"
             :flight="flight"
-            :distances="carStore.distances"
             :showCost="showCost"
-            :consumption="carStore.fuelConsumption"
             :key="flight.id"
+            :distances = 'distances'
           />
         </div>
         <div class="mt-6 flex flex-line w-full justify-center">

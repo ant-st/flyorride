@@ -1,25 +1,24 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 
 const props = defineProps({
   flight: {
     type: Object,
     required: true
   },
-  distances: {
-    type: Object
-  },
   showCost: {
-    type: Boolean
+    type: Boolean,
+    required: true
   },
-  consumption: {
-    type: Number
+  distances: {
+    type: Promise
   }
 });
 
 const queryStore = useQueryStore();
 const favoritesStore = useFavoritesStore();
 
-
+//@ts-ignore
 const crucialIndex = props.flight.route.findIndex(e => e.flyTo === props.flight.flyTo);
 const firstLeg = props.flight.route.slice(0, crucialIndex + 1);
 const secondLeg = props.flight.route.slice(crucialIndex + 1);
