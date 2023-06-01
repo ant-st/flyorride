@@ -139,18 +139,18 @@ const calculateTime = (time1: string, time2: string) => {
         v-if="distances && distances[flight.flyFrom] && showCost"
          class="mt-6 flex flex-line w-full items-center justify-center border-t-2"
     >
-      <p class="w-[35%] text-right px-2">W jedną stronę: {{distances[flight.flyFrom].distance.text}}</p>
+      <p class="w-[35%] text-xs sm:text-base text-right px-2">W jedną stronę: {{distances[flight.flyFrom].distance.text}}</p>
       <img src="../media/carIcon.svg" class="w-[20%]"/>
-      <p class="w-[35%] px-2">{{distances[flight.flyFrom].duration.text}}</p>
+      <p class="w-[35%] text-xs sm:text-base px-2">{{distances[flight.flyFrom].duration.text}}</p>
     </div>
     <!-- in favs -->
     <div
         v-if="favList && flight.carDistance && flight.carDistance.distance"
         class="mt-6 flex flex-line w-full items-center justify-center border-t-2"
     >
-      <p class="w-[35%] text-right px-2">W jedną stronę: {{flight.carDistance.distance.text}}</p>
+      <p class="w-[35%] text-xs sm:text-base text-right px-2">W jedną stronę: {{flight.carDistance.distance.text}}</p>
       <img src="../media/carIcon.svg" class="w-[20%]"/>
-      <p class="w-[35%] px-2">{{flight.carDistance.duration.text}}</p>
+      <p class="w-[35%] text-xs sm:text-base px-2">{{flight.carDistance.duration.text}}</p>
     </div>
     <!-- Cost -->
     <div class="flex flex-line justify-between items-center border-t-2 p-1 sm:p-2">

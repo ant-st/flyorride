@@ -27,20 +27,7 @@ let currentPage = ref(0);
 <template>
   <div>
     <div class="relative px-4 py-10 bg-white sm:mx-8 shadow rounded-3xl sm:p-10 flex flex-col justify-between">
-      <h2 class="w-full text-center">Wyniki wyszukiwania:</h2>
       <!-- Filtry -->
-      <div v-if="carTransfer" class="flex flex-line w-full h-[30px]">
-        <label class="flex flex-line w-1/2 justify-center">
-          <p>Pokaż koszty dojazdu samochodem na lotnisko: </p>
-          <input type="checkbox" class="p-2 m-2" v-model="showCost"/>
-        </label>
-        <label class="leading-loose flex flex-line w-1/2 justify-center" v-if="showCost">
-          <p>Spalanie auta:</p>
-          <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px] flex flex-line">
-            <input type="number" v-model="consumption" min=1 step=0.5 class="mx-2 px-2 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
-          </div>
-        </label>
-      </div>
       <div v-if='kiwiStore.kiwiResults.data && kiwiStore.kiwiResults.data.length' class="flex flex-line justify-evenly w-full">
         <div class="flex flex-col w-1/3">
           <p class="leading-loose">Ukryj loty z:</p>
@@ -107,7 +94,18 @@ let currentPage = ref(0);
           </div>
         </div>
       </div>
-
+      <div v-if="carTransfer" class="flex flex-line w-full justify-center">
+        <button @click='() => showCost = !showCost'
+                class="px-8 xl:px-10 w-1/2 py-3 my-4  min-w-fit
+                text-gray-900
+                text-sm sm:text-md text-center rounded-full
+                hover:shadow-md hover:shadow-blue-300
+                transition duration-500 bg-blue-100"
+                :class="{active: showCost}"
+        >
+          <span>Pokaż koszty dojazdu samochodem na lotnisko: </span>
+        </button>
+      </div>
       <!-- Wyniki -->
       <ClientOnly v-if="kiwiStore.filteredResults && kiwiStore.filteredResults.length">
         <!-- Auto -->
@@ -158,6 +156,11 @@ let currentPage = ref(0);
 
 .arrow:disabled {
   opacity: 0.3;
+}
+
+.active {
+  background-color: #3b82f6;
+  color: white;
 }
 
 </style>
