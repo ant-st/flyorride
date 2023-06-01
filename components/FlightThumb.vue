@@ -12,6 +12,9 @@ const props = defineProps({
   },
   distances: {
     type: Promise
+  },
+  favList: {
+    type: Boolean
   }
 });
 
@@ -140,16 +143,32 @@ const calculateTime = (time1: string, time2: string) => {
       <img src="../media/carIcon.svg" class="w-[20%]"/>
       <p class="w-[35%] px-2">{{distances[flight.flyFrom].duration.text}}</p>
     </div>
+    <!-- in favs -->
+    <div
+        v-if="favList && flight.carDistance && flight.carDistance.distance"
+        class="mt-6 flex flex-line w-full items-center justify-center border-t-2"
+    >
+      <p class="w-[35%] text-right px-2">W jedną stronę: {{flight.carDistance.distance.text}}</p>
+      <img src="../media/carIcon.svg" class="w-[20%]"/>
+      <p class="w-[35%] px-2">{{flight.carDistance.duration.text}}</p>
+    </div>
     <!-- Cost -->
     <div class="flex flex-line justify-between items-center border-t-2 p-1 sm:p-2">
       <ul class="w-1/3">
         <li class="flex flex-line items-center">
           <img src="../media/plane1.svg" class="w-[40px]"/>
-          <span class="text-sm pr-2">{{queryStore.query.travellers}}x</span> {{flight.fare.adults}}€
+          <span class="text-sm pr-2">
+            {{flight['pass_count'] ? flight['pass_count'] : queryStore.query.travellers}}x
+          </span>
+          {{flight.fare.adults}}€
         </li>
-        <li v-if="queryStore.query.children" class="flex flex-line items-center">
+        <li v-if="!favList && queryStore.query.children" class="flex flex-line items-center">
           <img src="../media/plane1.svg" class="w-[40px]"/>
           <span class="text-sm pr-2">{{queryStore.query.children}}x</span> {{flight.fare.children}}€
+        </li>
+        <li v-if="favList && flight['children_count']" class="flex flex-line items-center">
+          <img src="../media/plane1.svg" class="w-[40px]"/>
+          <span class="text-sm pr-2">{{flight['children_count']}}x</span> {{flight.fare.children}}€
         </li>
         <li class="flex flex-line items-center">
           <img src="../media/suitcase.svg" class="w-[40px]"/>
@@ -158,6 +177,10 @@ const calculateTime = (time1: string, time2: string) => {
         <li class="flex flex-line items-center" v-if="distances && distances[flight.flyFrom] && showCost">
           <img src="../media/carIcon.svg" class="w-[40px]"/>
           <span class="text-sm pr-2">2x</span> {{distances[flight.flyFrom].cost}}€
+        </li>
+        <li class="flex flex-line items-center" v-if="favList && flight.carDistance && flight.carDistance.cost">
+          <img src="../media/carIcon.svg" class="w-[40px]"/>
+          <span class="text-sm pr-2">2x</span> {{flight.carDistance.cost}}€
         </li>
       </ul>
 
@@ -168,7 +191,12 @@ const calculateTime = (time1: string, time2: string) => {
       -->
 
       <img src="../media/heartIcon.png"
-           @click="() => favoritesStore.toggle(flight)"
+           @click="() => favoritesStore.toggle({...flight,
+           ...{
+             'pass_count': queryStore.query.travellers,
+             'children_count': queryStore.query.children,
+             carDistance: distances ? distances[flight.flyFrom] : null}
+           })"
            class="h-[40px] heartIcon"
            :class="{
             notFavorite: !favoritesStore.checkId(flight.id)
@@ -177,7 +205,9 @@ const calculateTime = (time1: string, time2: string) => {
 
       <h3 class="text-3xl hover:underline w-1/3 text-right">
         <NuxtLink :to="flight['deep_link']" target="_blank" rel="noopener">
-        {{ (Number(flight.price) + ((distances && distances[flight.flyFrom] && showCost ) ? Number(distances[flight.flyFrom].cost)*2 : 0)).toFixed(2) }}€
+        {{ (Number(flight.price)
+            + ((distances && distances[flight.flyFrom] && showCost ) ? Number(distances[flight.flyFrom].cost)*2 : 0)
+            + ((flight.carDistance && flight.carDistance.cost ) ? Number(flight.carDistance.cost)*2 : 0)).toFixed(2)}}€
         </NuxtLink>
       </h3>
     </div>

@@ -20,6 +20,7 @@ onMounted(() => {
             v-for="flight in favStore.favorites"
             :flight="flight"
             :key="flight.id"
+            :fav-list="true"
         />
       </div>
     </div>
