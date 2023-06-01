@@ -1,10 +1,11 @@
 import {defineStore} from "pinia";
+import {useStorage} from "@vueuse/core";
 
 export const useFavoritesStore = defineStore('favorites', {
   state: () => {
     return {
-      favorites: []
-    }
+      favorites: useStorage('favorites', [], localStorage, { mergeDefaults: true })
+  }
   },
   actions: {
     checkId (id: string) {
@@ -15,6 +16,7 @@ export const useFavoritesStore = defineStore('favorites', {
       if (this.checkId(flight.id)) {
         // @ts-ignore
         this.favorites = this.favorites.filter(el => el.id !== flight.id);
+        // @ts-ignore
       }
       else {
         // @ts-ignore

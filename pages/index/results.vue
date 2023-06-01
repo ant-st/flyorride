@@ -5,10 +5,11 @@ const kiwiStore = useKiwiResultsStore();
 const carStore = useCarStore();
 const queryStore = useQueryStore();
 //@ts-ignore
-const carTransfer = queryStore.query.options.find(el => el.value === 'carTransfer');
+const carTransfer = queryStore.query.options ? queryStore.query.options.find(el => el.value === 'carTransfer') : null;
 
 //@ts-ignore
 if (carTransfer) {
+  //@ts-ignore
   carStore.updateConsumption(queryStore.query.consumption);
   carStore.getAirportsDistances();
 }
