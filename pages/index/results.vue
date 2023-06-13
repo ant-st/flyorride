@@ -6,6 +6,8 @@ const carStore = useCarStore();
 const queryStore = useQueryStore();
 //@ts-ignore
 const carTransfer = queryStore.query.options ? queryStore.query.options.find(el => el.value === 'carTransfer') : null;
+//@ts-ignore
+const carTransport = queryStore.query.options ? queryStore.query.options.find(el => el.value === 'drive') : null;
 
 //@ts-ignore
 if (carTransfer) {
@@ -107,43 +109,43 @@ let currentPage = ref(0);
         </button>
       </div>
       <!-- Wyniki -->
-      <ClientOnly v-if="kiwiStore.filteredResults && kiwiStore.filteredResults.length">
-        <!-- Auto -->
-
-        <div class="flex flex-line flex-wrap justify-evenly">
-          <FlightThumb
-            v-for="flight in kiwiStore.filteredResults.slice(currentPage*10 , (currentPage+1)*10 )"
-            :flight="flight"
-            :showCost="showCost"
-            :key="flight.id"
-            :distances = 'distances'
-          />
+      <ClientOnly>
+        <div class="w-full flex justify-center">
+          <CarTravelThumb v-if="carTransport"/>
         </div>
-        <div class="mt-6 flex flex-line w-full justify-center">
-
-          <button
-              :disabled="!currentPage"
-              @click="currentPage--"
-              class="p-2 arrow transition-opacity transition-duration-300"
-          >
-            <img src="../../media/downArrow.png" class="h-[20px] rotate-90 hover:rotate"/>
-          </button>
-
-          <p class="p-2">{{ currentPage + 1 }} / {{ Math.ceil(kiwiStore.filteredResults.length / 10) }}</p>
-
-          <button
-              :disabled="currentPage+1 === Math.ceil(kiwiStore.filteredResults.length/10)"
-              @click="currentPage++"
-              class="p-2 arrow transition-opacity transition-duration-300"
-          >
-            <img src="../../media/downArrow.png" class="h-[20px] -rotate-90"/>
-          </button>
+        <div v-if="kiwiStore.filteredResults && kiwiStore.filteredResults.length">
+          <div class="flex flex-line flex-wrap justify-evenly" >
+            <FlightThumb
+              v-for="flight in kiwiStore.filteredResults.slice(currentPage*10 , (currentPage+1)*10 )"
+              :flight="flight"
+              :showCost="showCost"
+              :key="flight.id"
+              :distances = 'distances'
+            />
+          </div>
+          <div class="mt-6 flex flex-line w-full justify-center">
+            <button
+                :disabled="!currentPage"
+                @click="currentPage--"
+                class="p-2 arrow transition-opacity transition-duration-300"
+            >
+              <img src="../../media/downArrow.png" class="h-[20px] rotate-90 hover:rotate"/>
+            </button>
+            <p class="p-2">{{ currentPage + 1 }} / {{ Math.ceil(kiwiStore.filteredResults.length / 10) }}</p>
+            <button
+                :disabled="currentPage+1 === Math.ceil(kiwiStore.filteredResults.length/10)"
+                @click="currentPage++"
+                class="p-2 arrow transition-opacity transition-duration-300"
+            >
+              <img src="../../media/downArrow.png" class="h-[20px] -rotate-90"/>
+            </button>
+          </div>
         </div>
-
+        <div v-else>
+          <h2 class="w-full text-center text-2xl py-4">Nie znaleziono wyników :(</h2>
+        </div>
       </ClientOnly>
-      <div v-else>
-        <h2 class="w-full text-center text-2xl py-4">Nie znaleziono wyników :(</h2>
-      </div>
+
     </div>
   </div>
 </template>

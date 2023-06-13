@@ -41,6 +41,7 @@ const getFromKiwi = async () => {
 
 </script>
 
+
 <template>
   <TheSearchBox @update:query = handleQueryChange />
   <div id="content" class="relative -top-80">

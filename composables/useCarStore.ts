@@ -5,7 +5,8 @@ export const useCarStore = defineStore('car', {
         return {
           fuelConsumption: 7.5,
           fuelPrice: 1.4,
-          distances: {}
+          distances: {},
+          carTravel: {}
         }
       },
       actions: {
@@ -45,6 +46,9 @@ export const useCarStore = defineStore('car', {
         },
         updateConsumption: function(newConsumption: number) {
           this.fuelConsumption = newConsumption;
+        },
+        getCarTravelFromGoogle: async function() {
+
         }
       },
       getters: {

@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import {storeToRefs} from "pinia";
-import {useStorage} from "@vueuse/core";
 import { onMounted } from 'vue'
 let favStore;
 

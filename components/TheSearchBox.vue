@@ -246,7 +246,7 @@ export default {
                     </div>
                   </div>
                 </div>
-                <div v-if='searchQuery.options.find(el => el.value.includes("car"))' class="flex flex-col w-1/3 p-1 items-between text-center">
+                <div v-if='searchQuery.options.find(el => el.value.includes("car") || el.value.includes("drive"))' class="flex flex-col w-1/3 p-1 items-between text-center">
                   <label class="leading-loose text-xs sm:text-base sm:py-1">Spalanie:</label>
                   <div class="relative focus-within:text-gray-600 text-gray-400 w-full max-w-[155px] flex flex-line">
                     <div class="w-[80%] sm:p-2 mx-auto">
