@@ -4,7 +4,8 @@ import {useStorage} from "@vueuse/core";
 export const useFavoritesStore = defineStore('favorites', {
   state: () => {
     return {
-      favorites: useStorage('favorites', [], localStorage, { mergeDefaults: true })
+      favorites: useStorage('favorites', [], localStorage, { mergeDefaults: true }),
+      roadtrips: useStorage('roadtrips', [], localStorage, { mergeDefaults: true }),
   }
   },
   actions: {

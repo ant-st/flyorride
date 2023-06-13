@@ -2,7 +2,11 @@
 
   <div class="relative w-[95%] p-2.5 sm:p-4 bg-blue-50 sm:m-2 my-4 mx-auto shadow rounded-3xl flex flex-line justify-between">
     <div id="map" class="w-1/2 h-full">
-      Map Component
+      <Map
+          :request="request"
+          :index="0"
+          @routeUpdate = 'routeUpdate'
+      />
     </div>
     <div v-if='route' class="w-1/2 flex flex-col">
       <button v-if='travellers-1'
@@ -39,10 +43,6 @@
 
 </template>
 
-<script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
-({key: "AIzaSyCFmoAQ5iDUdiz36GcaXskcXPFFgdaa4Dw", v: "beta"});</script>
-
-
 <script setup>
 
 let map;
@@ -53,38 +53,15 @@ let travellers = queryStore.query.children + queryStore.query.travellers;
 let route = ref();
 let showCost = ref(false);
 
-async function initMap() {
-  const {DirectionsRenderer} = await google.maps.importLibrary("routes");
-  const mapOptions = {
-    zoom: 14,
-    center: new google.maps.LatLng(51.919438, 19.1451359),
-  };
-  map = new google.maps.Map(document.getElementById('map'), mapOptions);
-  await calcRoute();
+const request = {
+  origin: queryStore.query.from,
+  destination: queryStore.query.to,
+  travelMode: "DRIVING",
+};
+
+const routeUpdate = (newRoute) => {
+  route.value = newRoute;
 }
-async function calcRoute() {
-  const {DirectionsService, DirectionsRenderer} = await google.maps.importLibrary("routes");
-  const directionsService = new google.maps.DirectionsService();
-    const selectedMode = ['DRIVING'];
-    const request = {
-      origin: queryStore.query.from,
-      destination: queryStore.query.to,
-      travelMode: "DRIVING",
-    };
-    await directionsService.route(request, function(response, status) {
-      if (status === 'OK') {
-        new google.maps.DirectionsRenderer({
-          directions: response,
-          map: map,
-        });
-        route.value = response.routes[0].legs[0];
-        console.log(route.value);
-      }
-    });
-  }
-
-onMounted(() => initMap());
-
 </script>
 
 <style>
