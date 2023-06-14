@@ -1,10 +1,10 @@
 <template>
 
   <div class="relative w-[95%] p-2.5 sm:p-4 bg-blue-50 sm:m-2 my-4 mx-auto shadow rounded-3xl flex flex-line justify-between">
-    <div id="map" class="w-1/2 h-full">
+    <div class="w-1/2 h-full">
       <Map
           :request="request"
-          :index="0"
+          :index="'0'"
           @routeUpdate = 'routeUpdate'
       />
     </div>
