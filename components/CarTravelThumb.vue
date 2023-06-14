@@ -4,7 +4,7 @@
     <div class="w-1/2 h-full">
       <Map
           :request="request"
-          :index="'0'"
+          :index="index ? index : '0'"
           @routeUpdate = 'routeUpdate'
       />
     </div>
@@ -44,20 +44,25 @@
 </template>
 
 <script setup>
+const props = defineProps({
+  request: {
+    type: Object,
+    required: true,
+  },
+  travellers: {
+    type: Number,
+    required: true
+  },
+  index: {
+    type: String,
+    required: false
+  }
+})
 
-let map;
-let queryStore = useQueryStore();
 let carStore = useCarStore();
 
-let travellers = queryStore.query.children + queryStore.query.travellers;
 let route = ref();
 let showCost = ref(false);
-
-const request = {
-  origin: queryStore.query.from,
-  destination: queryStore.query.to,
-  travelMode: "DRIVING",
-};
 
 const routeUpdate = (newRoute) => {
   route.value = newRoute;

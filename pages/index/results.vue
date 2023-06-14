@@ -4,6 +4,7 @@ import {storeToRefs} from "pinia";
 const kiwiStore = useKiwiResultsStore();
 const carStore = useCarStore();
 const queryStore = useQueryStore();
+
 //@ts-ignore
 const carTransfer = queryStore.query.options ? queryStore.query.options.find(el => el.value === 'carTransfer') : null;
 //@ts-ignore
@@ -16,13 +17,21 @@ if (carTransfer) {
   carStore.getAirportsDistances();
 }
 
-const {distances, distancesLength} = storeToRefs(carStore);
+const {distances} = storeToRefs(carStore);
 
 let showCost = ref(false);
-
 let dropperDest = ref(false);
 let dropperAirport = ref(false);
 let currentPage = ref(0);
+
+// Car travel parameters
+const request = {
+  origin: queryStore.query.from,
+  destination: queryStore.query.to,
+  travelMode: "DRIVING",
+};
+//@ts-ignore
+let travellers = queryStore.query.children + queryStore.query.travellers;
 
 </script>
 
@@ -110,8 +119,12 @@ let currentPage = ref(0);
       </div>
       <!-- Wyniki -->
       <ClientOnly>
-        <div class="w-full flex justify-center">
-          <CarTravelThumb v-if="carTransport"/>
+        <div class="w-full flex flex-wrap justify-center">
+          <CarTravelThumb
+              v-if="carTransport"
+              :request = "request"
+              :travellers = "travellers"
+          />
         </div>
         <div v-if="kiwiStore.filteredResults && kiwiStore.filteredResults.length">
           <div class="flex flex-line flex-wrap justify-evenly" >
