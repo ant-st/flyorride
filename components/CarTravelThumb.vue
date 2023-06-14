@@ -1,14 +1,21 @@
 <template>
 
-  <div class="relative w-[95%] p-2.5 sm:p-4 bg-blue-50 sm:m-2 my-4 mx-auto shadow rounded-3xl flex flex-line justify-between">
-    <div class="w-1/2 h-full">
+  <div class="relative w-[95%] p-2.5 sm:p-4 bg-blue-50 sm:m-2 my-4 mx-auto shadow rounded-3xl flex flex-line flex-wrap justify-between">
+    <div class="w-full md:w-1/2 h-[300px] md:h-full">
       <Map
           :request="request"
           :index="index ? index : '0'"
           @routeUpdate = 'routeUpdate'
       />
     </div>
-    <div v-if='route' class="w-1/2 flex flex-col">
+    <div v-if='route' class="w-full md:w-1/2 flex flex-col">
+      <img src="../media/heartIcon.png"
+           @click="favoritesStore.toggleRoadtrip(request, travellers)"
+           class="h-[40px] w-[40px] heartIcon absolute right-20 top-8"
+           :class="{
+            notFavorite: !favoritesStore.checkRoadtrip(request)
+           }"
+      />
       <button v-if='travellers-1'
               @click='() => showCost = !showCost'
               class="px-8 xl:px-10 w-1/2 py-3 my-4 mx-auto  min-w-fit
@@ -60,6 +67,7 @@ const props = defineProps({
 })
 
 let carStore = useCarStore();
+const favoritesStore = useFavoritesStore();
 
 let route = ref();
 let showCost = ref(false);
@@ -74,5 +82,19 @@ const routeUpdate = (newRoute) => {
 .active {
   background-color: #3b82f6;
   color: white;
+}
+
+.notFavorite {
+  filter: grayscale(1);
+  -webkit-filter: grayscale(1)
+}
+
+.heartIcon {
+  -webkit-transition: 0.2s -webkit-filter linear;
+  -moz-transition: 0.2s -moz-filter linear;
+  -moz-transition: 0.2s filter linear;
+  -ms-transition: 0.2s -ms-filter linear;
+  -o-transition: 0.2s -o-filter linear;
+  transition: 0.2s filter linear, 1s -webkit-filter linear;
 }
 </style>
