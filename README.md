@@ -14,6 +14,11 @@ In the future I will implement the possibily to compare flight cost with driving
 ### Results
 After fetching data from Kiwi.com, the app displays the results. There you can choose whether to show the cost of getting to the airport or not - then you need to write the average fuel consumption of your car in order to calculate adequate result. 
 
+The results can be filtered by the airports you want to include. The results are always sorted by price, but I will consider enhancing it in the future.
+
+### Favorites
+Upon clicking on the heart icon, the user may save the flight to his favorites tab. Then, he may compare his pinned itineraries. When the search query includes car transfer, the cost is saved in the favorites. If the search result did not include the car transfer, it is not shown. The favorites are stored in the browser local storage using Vue Use.
+
 ## Frameworks and APIs
 
 The app runs on Nuxt.js, which is Vue's framework. It utilises its built in Routing and Layout capabilities. 
@@ -23,6 +28,7 @@ I have used the following APIs:
 - Kiwi.com (Tequila) Places API for finding proper IDs of airports/countries and Search API for looking for flights
 - Google Matrix API for calculating the distance between starting point and airport
 - Fuel Prices API for fetching actual fuel prices in whole Europe (used for calculating transfer's cost as well as for future uses).
+- VueUse for utilising the local storage
 
 ## Colors, graphics, responsiveness
 My app utilises Tailwwind in order to dynamically and easily setup the CSS. It is designed as Mobile-First app.
@@ -32,4 +38,4 @@ In the following days I am willing to implement API from Booking.com, RentalCars
 
 ### Check it out
 
-Currently the website is not yet deployed as it is still a work in progress. If you want to see it, feel free to contact me.
+Currently the website is deployed with majority of its possibilites working, but remember about the CORS.
